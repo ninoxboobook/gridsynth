@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Synth</title>
+    <script src="js/main.js"></script>
+    <script src="js/instruments.js"></script>
+    <script src="js/metronome.js"></script>
+</head>
+
+<body>
+
+    <div id="content">
+        <button onclick="Tone.start().then(playNote())">Play</button>
+        <button onclick="Tone.start().then(stopNote())">Stop</button>
+    </div>
+
+    <script>
+        const loop = new Tone.Loop((time) => {
+            // triggered every eighth note.
+            synth.triggerAttackRelease("C4", "8n");
+        }, "4n").start(0);
+        
+
+        function playNote() {
+            Tone.Transport.start();
+            rampTempo();
+        }
+        function stopNote() {
+            Tone.Transport.stop();
+        }
+    </script>
+</body>
+
+</html>

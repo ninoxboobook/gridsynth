@@ -1,0 +1,26 @@
+{
+  "name": "gridsynth",
+  "version": "1.0.0",
+  "description": "Data sonification of one day of the Victorian energy grid.",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ninoxboobook/gridsynth.git"
+  },
+  "keywords": [
+    "data",
+    "sonification"
+  ],
+  "author": "Rihana Ries",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ninoxboobook/gridsynth/issues"
+  },
+  "homepage": "https://github.com/ninoxboobook/gridsynth#readme",
+  "dependencies": {
+    "tone": "^14.7.77"
+  }
+}
