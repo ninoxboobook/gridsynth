@@ -30,6 +30,10 @@
             77, 76, 76, 75
         ]
 
+        let coalVolumes = [-14,-13,-12,-11,-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0];
+
+        coalVolume = new VolumeController(coalVolumes,1000,coal);
+
         const melody = [
             ['A3', '8n'],
             ['B3', '8n'],
@@ -74,6 +78,7 @@
             Tone.start();
             Tone.Transport.start();
             rampTempo(tempos);
+            rampVolume(coalVolume);
         }
 
         function stopNote() {
@@ -82,10 +87,12 @@
 
         window.addEventListener("load", function () {
             document.getElementById("play-button").addEventListener("click", function () {
+                playing = true;
                 playNote(tempos);
             });
 
             document.getElementById("stop-button").addEventListener("click", function () {
+                playing = false;
                 Tone.Transport.stop();
             });
         });
