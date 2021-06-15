@@ -67,6 +67,8 @@ function stopNote() {
     Tone.Transport.stop();
 }
 
+var playing = false;
+
 window.addEventListener("load", function () {
     document.getElementById("play-button").addEventListener("click", function () {
         playing = true;
