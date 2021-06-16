@@ -1,0 +1,107 @@
+body {
+    font-family: 'Telstra Akkurat', Helvetica, Arial, sans-serif;
+    color: #fff;
+    font-size: 16px;
+    background:
+        linear-gradient(#8446DC, transparent),
+        linear-gradient(to top left, #C97EE7, #6932E7, transparent),
+        linear-gradient(to top right, #5385f5, transparent);
+    background-blend-mode: screen;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 0;
+}
+
+#p5-wrapper {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -999;
+}
+
+#content-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    display: flex;
+}
+
+.content {
+    width: 80%;
+    margin: auto;
+    overflow: auto;
+    text-align: center;
+}
+
+button {
+    border: 3px #fff solid;
+    background-color: transparent;
+    color: #fff;
+    border-radius: 30px;
+    font-size: 1.5em;
+    min-width: 140px;
+    padding: 16px 32px;
+    transition: all ease-in-out .2s;
+    margin: 0 8px 12px 0;
+}
+
+button:hover {
+    background-color: transparent;
+    color: #fff;
+    transition: all ease-in-out .2s;
+}
+
+button.emphasis {
+    position: relative;
+    background-color: #fff;
+    border-color: #fff;
+    color: #8446DC;
+    transition: all ease-in-out .2s;
+}
+
+button.emphasis:hover {
+    background-color: #fff;
+    border-color: #fff;
+    color: #8446DC;
+    transition: all ease-in-out .2s;
+}
+
+button.emphasis::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    content:'';
+    border-color: #8446DC;
+    border-radius: 80px;
+    -webkit-box-shadow: 0px 3px 9px 3px rgba(105,50,231,0.6);
+    box-shadow: 0px 3px 9px 3px rgba(105,50,231,0.6);
+    mix-blend-mode: multiply;
+    transition: all ease-in-out .2s;
+    z-index: -998;
+}
+
+button.emphasis:hover::before {
+    -webkit-box-shadow: 0px 0px 0px 0px rgba(105,50,231,0);
+    box-shadow: 0px 0px 0px 0px rgba(105,50,231,0);
+    transition: all ease-in-out .2s;
+}
+
+
+.display {
+    font-size: 8em;
+    font-weight: bold;
+    text-transform: lowercase;
+    margin-top: 0;
+}
+
+.subtitle {
+    font-size: 3em;
+    text-transform: lowercase;
+}

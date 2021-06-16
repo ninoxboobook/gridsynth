@@ -3,27 +3,36 @@
 
 <head>
     <title>gridsynth - Sonifying the electricity grid</title>
+    <link rel="stylesheet" href="css/style.css">
     <script src="js/main.js"></script>
     <script src="js/instruments.js"></script>
     <script src="js/metronome.js"></script>
+    <script src="js/data.js"></script>
 </head>
 
 <body>
-
-    <div id="content">
-        <div>
+    <div id="p5-wrapper">
         <script>
             function setup() {
-                createCanvas(400, 400);
+                var canvas = createCanvas(windowWidth, windowHeight);
+                canvas.parent("p5-wrapper");
             }
 
             function draw() {
-                line(20,20,200,20);
+                line(20, 20, 200, 20);
+            }
+
+            function windowResized() {
+                resizeCanvas(windowWidth, windowHeight);
             }
         </script>
+    </div>
+    <div id="content-wrapper">
+        <div class="content">
+            <h1 class="display">Gridsynth</h1>
+            <button id="play-button" class="emphasis">Play</button>
+            <button id="stop-button">Stop</button>
         </div>
-        <button id="play-button">Play</button>
-        <button id="stop-button">Stop</button>
     </div>
 
     <script src="js/gridsynth.js"></script>
