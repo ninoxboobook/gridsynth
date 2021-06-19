@@ -1,13 +1,13 @@
 // Get the data points for conversion
 
-coalData = new DataConverter(coalGeneration, totalGeneration, 23, -30, 1000);
-hydroData = new DataConverter(hydroGeneration, totalGeneration, 23, -30, 1000);
+let coalData = new DataConverter(coalGeneration, totalGeneration, 23, -30, 1000);
+let hydroData = new DataConverter(hydroGeneration, totalGeneration, 23, -30, 1000);
 
 
 // Set the volume controls
 
-coalVolume = new VolumeController(coalVolumes, 1000, coal);
-gasVolume = new VolumeController(gasVolumes, 1000, gas);
+let coalVolume = new VolumeController(coalVolumes, 1000, coal);
+let gasVolume = new VolumeController(gasVolumes, 1000, gas);
 
 
 // Set the tempo controls
@@ -15,7 +15,7 @@ gasVolume = new VolumeController(gasVolumes, 1000, gas);
 Tone.Transport.bpm.value = 73; // Initial tempo
 Tone.Transport.timeSignature = 3; // Time signature
 
-tempos = new TempoController(tempoValues, 1000);
+let tempos = new TempoController(tempoValues, 1000);
 
 
 // Set the loops
@@ -49,7 +49,7 @@ function playNote() {
     rampTempo(tempos);
     rampVolume(coalVolume);
     rampVolume(gasVolume);
-    convertData(hydroData);
+    console.log(convertData(coalData));
 }
 
 function stopNote() {
