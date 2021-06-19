@@ -1,5 +1,24 @@
+// Get the data points for conversion
+
+coalData = new DataConverter(coalGeneration, totalGeneration, 23, -30, 1000);
+hydroData = new DataConverter(hydroGeneration, totalGeneration, 23, -30, 1000);
+
+
+// Set the volume controls
+
 coalVolume = new VolumeController(coalVolumes, 1000, coal);
 gasVolume = new VolumeController(gasVolumes, 1000, gas);
+
+
+// Set the tempo controls
+
+Tone.Transport.bpm.value = 73; // Initial tempo
+Tone.Transport.timeSignature = 3; // Time signature
+
+tempos = new TempoController(tempoValues, 1000);
+
+
+// Set the loops
 
 const loop = new Tone.Loop((time) => {
     let t = Tone.now();
@@ -8,8 +27,6 @@ const loop = new Tone.Loop((time) => {
         gas.triggerAttackRelease(note[0], Tone.Time(note[1]), t);
         t += Tone.Time(note[1]);
     }
-    // triggered every eighth note.
-    // synth.triggerAttackRelease("C4", "8n");
 }, "1m").start(0);
 
 const bassloop = new Tone.Loop((time) => {
@@ -19,18 +36,20 @@ const bassloop = new Tone.Loop((time) => {
         coal.triggerAttackRelease(note[0], Tone.Time(note[1]), t);
         t += Tone.Time(note[1]);
     }
-    // triggered every eighth note.
-    // synth.triggerAttackRelease("C4", "8n");
 }, "1m").start(0);
+
+
+// Set up UI functions
 
 var playing = false;
 
-function playNote(tempos) {
+function playNote() {
     Tone.start();
     Tone.Transport.start();
     rampTempo(tempos);
     rampVolume(coalVolume);
     rampVolume(gasVolume);
+    convertData(hydroData);
 }
 
 function stopNote() {
@@ -53,7 +72,7 @@ window.addEventListener("load", function () {
     document.getElementById("stop-button").disabled = true;
     document.getElementById("play-button").addEventListener("click", function () {
         playing = true;
-        playNote(tempos);
+        playNote();
         buttonFocus();
     });
 
