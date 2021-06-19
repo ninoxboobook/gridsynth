@@ -18,7 +18,7 @@ Tone.Transport.timeSignature = 3; // Time signature
 let tempos = new TempoController(tempoValues, 1000);
 
 
-// Set the loops
+// Set the instrument loops
 
 const loop = new Tone.Loop((time) => {
     let t = Tone.now();
@@ -49,7 +49,6 @@ function playNote() {
     rampTempo(tempos);
     rampVolume(coalVolume);
     rampVolume(gasVolume);
-    console.log(convertData(coalData));
 }
 
 function stopNote() {
