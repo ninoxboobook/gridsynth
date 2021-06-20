@@ -24,6 +24,7 @@ coal = new Tone.MonoSynth({
         release: 0.095,
     }
 }).toDestination();
+coal.name = "Coal";
 
 gas = new Tone.AMSynth({
     harmonicity: 2,
@@ -37,6 +38,7 @@ gas = new Tone.AMSynth({
         release: 0.2,
     }
 }).toDestination();
+gas.name = "Gas";
 
 hydro = new Tone.Synth({
     oscillator: {
