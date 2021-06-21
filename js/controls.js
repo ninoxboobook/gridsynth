@@ -2,6 +2,20 @@
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 
+// Creates max value array for BPMs so convertData can be used
+
+const createMaxValueArray = (values) => {
+    if (values) {
+        let output = [];
+        let maxValue = values.reduce(function (a, b) {
+            return Math.max(a, b);
+        });
+        values.forEach((value, i) => {
+            output.push(maxValue);
+        })
+        return output;
+    }
+}
 
 // Converts raw data into values within a specified range at a specified interval
 
@@ -51,5 +65,14 @@ const rampTempo = async (tempos, tick) => {
                 await sleep(tick);
             }
         }
+    }
+}
+
+// Generates melodies
+
+const generateMelody = (notes, measures) => {
+    if (notes && measures) {
+        let melody = [];
+        return melody;
     }
 }

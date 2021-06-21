@@ -1,11 +1,12 @@
 // Get the data points for conversion
 
-let coalData = convertData(coalGeneration, totalGeneration, 23, -30, 1000);
-let gasData = convertData(gasGeneration, totalGeneration, 23, -30, 1000);
+let bpmData = convertData(bpms, createMaxValueArray(bpms), 40, 20)
+let coalData = convertData(coalGeneration, totalGeneration, 21, -25);
+let windData = convertData(windGeneration, totalGeneration, 21, -25);
 
 // Set the tempo controls
 
-Tone.Transport.bpm.value = 73; // Initial tempo
+Tone.Transport.bpm.value = bpmData[0]; // Initial tempo
 Tone.Transport.timeSignature = 3; // Time signature
 
 // Set the instrument loops
@@ -13,11 +14,11 @@ Tone.Transport.timeSignature = 3; // Time signature
 const loop = new Tone.Loop((time) => {
     let t = Tone.now();
 
-    for (const note of melody) {
-        gas.triggerAttackRelease(note[0], Tone.Time(note[1]), t);
+    for (const note of windmelody) {
+        wind.triggerAttackRelease(note[0], Tone.Time(note[1]), t);
         t += Tone.Time(note[1]);
     }
-}, "1m").start(0);
+}, "2m").start(0);
 
 const bassloop = new Tone.Loop((time) => {
     let t = Tone.now();
@@ -28,6 +29,9 @@ const bassloop = new Tone.Loop((time) => {
     }
 }, "1m").start(0);
 
+const priceLoop = new Tone.Loop((time) => {
+    price.triggerAttackRelease("G#1", "2n.");
+}, "1n").start(0);
 
 // Set up UI functions
 
@@ -36,8 +40,8 @@ var playing = false;
 function playNote() {
     Tone.start();
     Tone.Transport.start();
-    rampTempo(tempoValues, 1000);
-    rampVolume(gasData, 1000, gas);
+    rampTempo(bpmData, 1000);
+    rampVolume(windData, 1000, wind);
     rampVolume(coalData, 1000, coal);
 }
 

@@ -1,58 +1,46 @@
 // Instruments
-let synth;
-let coal;
-let gas;
-let hydro;
-let solar;
-let wind;
 
-
-synth = new Tone.Synth({
-    oscillator: {
-        type: "sine"
-    }
-});
-
-coal = new Tone.MonoSynth({
-    oscillator: {
-        type: "sine"
+let price = new Tone.Sampler({
+    urls: {
+        C2: "singing_bowl.wav"
     },
-    envelope: {
-        attack: 0.07,
-        decay: 0.08,
-        sustain: 0.085,
-        release: 0.095,
-    }
+    baseUrl: "/samples/singingbowl/",
+    attack: 1,
+    release: 1,
+    curve: "linear",
+    volume: -12,
+}).toDestination();
+
+let coal = new Tone.Sampler({
+    urls: {
+        G3: "piano_G3_pp_RR2.wav",
+        G4: "piano_G4_pp_RR2.wav",
+    },
+    baseUrl: "/samples/piano/",
 }).toDestination();
 coal.name = "Coal";
 
-gas = new Tone.AMSynth({
-    harmonicity: 2,
-    oscillator: {
-        type: "sine",
+let wind = new Tone.Sampler({
+    urls: {
+        G3: "9283__eliasheuninck__sol-3.wav",
     },
-    envelope: {
-        attack: 0.04,
-        decay: 0.4,
-        sustain: 0.5,
-        release: 0.2,
-    }
+    baseUrl: "/samples/musicbox/",
 }).toDestination();
-gas.name = "Gas";
+wind.name = "Wind";
 
-hydro = new Tone.Synth({
+let hydro = new Tone.Synth({
     oscillator: {
         type: "sine"
     },
 }).toDestination();
 
-solar = new Tone.Synth({
+let solar = new Tone.Synth({
     oscillator: {
         type: "sine"
     },
 }).toDestination();
 
-wind = new Tone.Synth({
+let gas = new Tone.Synth({
     oscillator: {
         type: "sine"
     },
@@ -61,16 +49,21 @@ wind = new Tone.Synth({
 // Effects rack
 
 const distortion = new Tone.Distortion(0.8).toDestination();
-const reverb = new Tone.Reverb(4).toDestination();
+const reverb = new Tone.Reverb(5).toDestination();
 const compressor = new Tone.Compressor(-50,1);
 const chorus = new Tone.Chorus(1, 1, 1).toDestination().start();
-const feedbackDelay = new Tone.FeedbackDelay("8n", 0.5).toDestination();
+const pingpongDelay = new Tone.PingPongDelay("8n", 0.5).toDestination();
 const tremolo = new Tone.Tremolo(3, 0.75).toDestination().start();
 
 
-synth.connect(reverb);
-gas.connect(chorus);
-gas.connect(feedbackDelay);
-gas.connect(tremolo);
+// coal.connect(chorus);
+// coal.connect(pingpongDelay);
+// coal.connect(tremolo);
+coal.connect(reverb);
+
+wind.connect(chorus);
+wind.connect(pingpongDelay);
+// wind.connect(tremolo);
+wind.connect(reverb);
 compressor.toDestination();
 // coal.connect(distortion);
