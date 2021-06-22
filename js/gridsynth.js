@@ -10,8 +10,8 @@ let batteryData = convertData(batteryGeneration, totalGeneration, 21, -25);
 
 // Get the melodies
 
-let coalMelody;
-let windMelody;
+let coalMelody = (createMelody(coalGeneration, totalGeneration, spotPrice, bpmData));
+let windMelody = (createMelody(windGeneration, totalGeneration, spotPrice, bpmData));
 let hydroMelody;
 let gasMelody;
 let solarMelody;
@@ -24,23 +24,31 @@ Tone.Transport.timeSignature = 3; // Time signature
 
 // Set the instrument loops
 
-const loop = new Tone.Loop((time) => {
+const playMelody = (melody, instrument) => {
     let t = Tone.now();
-
-    for (const note of windmelody) {
-        wind.triggerAttackRelease(note[0], Tone.Time(note[1]), t);
+    for (const note of melody) {
+        instrument.triggerAttackRelease(note[0], Tone.Time(note[1]), t);
         t += Tone.Time(note[1]);
     }
-}, "2m").start(0);
+}
 
-const bassloop = new Tone.Loop((time) => {
-    let t = Tone.now();
+// const loop = new Tone.Loop((time) => {
+//     let t = Tone.now();
 
-    for (const note of coalmelody) {
-        coal.triggerAttackRelease(note[0], Tone.Time(note[1]), t);
-        t += Tone.Time(note[1]);
-    }
-}, "1m").start(0);
+//     for (const note of windmelody) {
+//         wind.triggerAttackRelease(note[0], Tone.Time(note[1]), t);
+//         t += Tone.Time(note[1]);
+//     }
+// }, "800m").start(0);
+
+// const bassloop = new Tone.Loop((time) => {
+//     let t = Tone.now();
+
+//     for (const note of coalmelody) {
+//         coal.triggerAttackRelease(note[0], Tone.Time(note[1]), t);
+//         t += Tone.Time(note[1]);
+//     }
+// }, "1m").start(0);
 
 const priceLoop = new Tone.Loop((time) => {
     price.triggerAttackRelease("G#1", "2n.");
@@ -56,6 +64,8 @@ function playNote() {
     rampTempo(bpmData, 1000);
     rampVolume(windData, 1000, wind);
     rampVolume(coalData, 1000, coal);
+    playMelody(coalMelody,coal);
+    playMelody(windMelody,wind);
 }
 
 function stopNote() {

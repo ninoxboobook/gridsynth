@@ -2,7 +2,7 @@ const scale = ['G#', 'B', 'D#', 'F#'];
 
 const octaves = ['2', '3', '4', '5'];
 
-const noteLengths = ['1n', '2n', '4n', '8n', '16n'];
+const noteLengths = ['1n', '2n', '4n', '8n'];
 
 const loopLengths = ['1m', '2m', '3m', '4m'];
 

@@ -40,48 +40,65 @@ const createNote = (pitch, octave, noteLength) => {
 }
 
 // Iterate over the generation data
-const createMelody = (generationValues, spotPrices, bpms) => {
+const createMelody = (generationValues, noise, spotPrices, bpms) => {
     if (generationValues && spotPrices && bpms) {
         let melody = [];
+
         generationValues.forEach((generationValue, i) => {
             let pitch;
             if (generationValue > 1) {
-                pitch = log(generationValue).toString().charAt(5);
-                if (pitch >= 1 && pitch <= 3) {
+                pitch = Math.log(generationValue + noise[i]).toString().charAt(4);
+
+                if (pitch == '0') {
+                    pitch = scale[3];
+                } else if (pitch == '1' || pitch == '2' || pitch == '3') {
+                    pitch = scale[0];
+                } else if (pitch == '4' || pitch == '5' || pitch == '6') {
                     pitch = scale[1];
-                }
-                if (pitch >= 4 && pitch <= 6) {
+                } else if (pitch == '7' || pitch == '8' || pitch == '9') {
                     pitch = scale[2];
                 }
-                if (pitch >= 7 && pitch <= 9) {
-                    pitch = scale[3];
-                } else {
-                    pitch = scale[4];
-                }
             } else {
-                pitch = 'G#';
+                pitch = scale[3];
             }
+
             let octave;
-            if (spotPrices[i] < 50) {
-                octave = octaves[4];
-            } else if (spotPrices[i] >= 50 && spotPrices[i] < 100) {
-                octave = octaves[3];
-            } else if (spotPrices[i] >= 100 && spotPrices[i] < 150) {
-                octave = octaves[2];
-            } else {
+            if (spotPrices[i] > 200) {
+                octave = octaves[0];
+            } else if (spotPrices[i] <= 200 && spotPrices[i] > 150) {
                 octave = octaves[1];
+            } else if (spotPrices[i] <= 150 && spotPrices[i] > 100) {
+                octave = octaves[2];
+            } else if (spotPrices[i] <= 100) {
+                octave = octaves[3];
             }
+
             let noteLength;
+            let maxValue = bpms.reduce(function (a, b) {
+                return Math.max(a, b);
+            });
+            if (bpms[i] <= maxValue * .25) {
+                noteLength = noteLengths[0];
+            } else if (bpms[i] > maxValue * .25 && bpms[i] <= maxValue * .5) {
+                noteLength = noteLengths[1];
+            } else if (bpms[i] > maxValue * .5 && bpms[i] <= maxValue * .75) {
+                noteLength = noteLengths[2];
+            } else if (bpms[i] > maxValue * .75) {
+                noteLength = noteLengths[3];
+            }
 
 
-
-            createNote(pitch, octave, noteLength);
+            if (pitch && octave && noteLength) {
+                melody.push(createNote(pitch, octave, noteLength));
+            }
         })
         return melody;
     }
 }
 
 // For each value:
+// LESS THAN <
+// GREATER THAN >
 // Get the spot price at the time - spot price determines octave
 // If spot price[i] is [1]over 150 [2]between 100-150 [3]between 50-100 [4]below 50
 //if value is zero, rest, if 1, ???, otherwise log(x), number to string, get 5th decimal point
