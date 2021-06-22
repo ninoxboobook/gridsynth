@@ -23,7 +23,7 @@ const loop = new Tone.Loop((time) => {
 const bassloop = new Tone.Loop((time) => {
     let t = Tone.now();
 
-    for (const note of bassline) {
+    for (const note of coalmelody) {
         coal.triggerAttackRelease(note[0], Tone.Time(note[1]), t);
         t += Tone.Time(note[1]);
     }

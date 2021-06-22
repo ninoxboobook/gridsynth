@@ -46,6 +46,12 @@ let gas = new Tone.Synth({
     },
 }).toDestination();
 
+let battery = new Tone.Synth({
+    oscillator: {
+        type: "sine"
+    },
+}).toDestination();
+
 // Effects rack
 
 const distortion = new Tone.Distortion(0.8).toDestination();
@@ -56,14 +62,10 @@ const pingpongDelay = new Tone.PingPongDelay("8n", 0.5).toDestination();
 const tremolo = new Tone.Tremolo(3, 0.75).toDestination().start();
 
 
-// coal.connect(chorus);
-// coal.connect(pingpongDelay);
-// coal.connect(tremolo);
 coal.connect(reverb);
 
 wind.connect(chorus);
 wind.connect(pingpongDelay);
-// wind.connect(tremolo);
 wind.connect(reverb);
+
 compressor.toDestination();
-// coal.connect(distortion);
