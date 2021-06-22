@@ -1,8 +1,21 @@
 // Get the data points for conversion
 
-let bpmData = convertData(bpms, createMaxValueArray(bpms), 40, 20)
+let bpmData = convertData(scheduledDemand, createMaxValueArray(scheduledDemand), 40, 20)
 let coalData = convertData(coalGeneration, totalGeneration, 21, -25);
 let windData = convertData(windGeneration, totalGeneration, 21, -25);
+let hydroData = convertData(hydroGeneration, totalGeneration, 21, -25);
+let gasData = convertData(gasGeneration, totalGeneration, 21, -25);
+let solarData = convertData(solarGeneration, totalGeneration, 21, -25);
+let batteryData = convertData(batteryGeneration, totalGeneration, 21, -25);
+
+// Get the melodies
+
+let coalMelody;
+let windMelody;
+let hydroMelody;
+let gasMelody;
+let solarMelody;
+let batteryMelody;
 
 // Set the tempo controls
 
