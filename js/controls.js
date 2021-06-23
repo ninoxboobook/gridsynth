@@ -120,6 +120,12 @@ const rampVolume = async (volumes, tick, instrument) => {
     }
 }
 
+// Controls spot price bassline with trends
+
+// Plays melodies at highest and lowest points
+
+// Adds percussion at certain bpmg
+
 // Changes tempo according to converted data source
 
 const setTempo = (tempo) => {

@@ -1,6 +1,6 @@
 // Get the data points for conversion
 
-let bpmData = convertData(scheduledDemand, createMaxValueArray(scheduledDemand), 50, 20)
+let bpmData = convertData(scheduledDemand, createMaxValueArray(scheduledDemand), 40, 20)
 let coalData = convertData(coalGeneration, totalGeneration, 21, -25);
 let windData = convertData(windGeneration, totalGeneration, 21, -25);
 let hydroData = convertData(hydroGeneration, totalGeneration, 21, -25);
@@ -28,17 +28,17 @@ const playMelody = (melody, instrument) => {
     let t = Tone.now();
     for (const note of melody) {
         if (note[0] != 'rest') {
-        instrument.triggerAttackRelease(note[0], Tone.Time(note[1]), t);
-        t += Tone.Time(note[1]);
+            instrument.triggerAttackRelease(note[0], Tone.Time(note[1]), t);
+            t += Tone.Time(note[1]);
         } else {
             t += Tone.Time(note[1]);
         }
     }
 }
 
-const priceLoop = new Tone.Loop((time) => {
-    price.triggerAttackRelease("G1", "2n.");
-}, "1n").start(0);
+// const priceLoop = new Tone.Loop((time) => {
+//     price.triggerAttackRelease("G1", "2n.");
+// }, "1n").start(0);
 
 // Set up UI functions
 
@@ -50,13 +50,13 @@ function playNote() {
     rampTempo(bpmData, 1000);
     rampVolume(windData, 1000, wind);
     rampVolume(coalData, 1000, coal);
+    rampVolume(gasData, 1000, gas);
+    rampVolume(solarData, 1000, solar);
+    rampVolume(batteryData, 1000, battery);
     rampVolume(hydroData, 1000, hydro);
-    playMelody(coalMelody,coal);
-    playMelody(windMelody,wind);
-    playMelody(hydroMelody,hydro);
-    // playMelody(solarMelody,solar);
-    // playMelody(gasMelody,gas);
-    // playMelody(batteryMelody,battery);
+    playMelody(coalMelody, coal);
+    playMelody(windMelody, wind);
+    playMelody(hydroMelody, hydro);
 }
 
 function stopNote() {

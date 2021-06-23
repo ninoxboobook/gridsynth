@@ -1,4 +1,5 @@
-const scale = ['G', 'B', 'D', 'F#', 'A'];
+const scale = ['G', 'B', 'C', 'D', 'E'];
+// ['G', 'B', 'D', 'F#', 'A'];
 // ['F','A','C','Eb','G'];
 
 const octaves = ['2', '3', '4'];
