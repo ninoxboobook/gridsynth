@@ -1,6 +1,6 @@
 // Get the data points for conversion
 
-let bpmData = convertData(scheduledDemand, createMaxValueArray(scheduledDemand), 40, 20)
+let bpmData = convertData(scheduledDemand, createMaxValueArray(scheduledDemand), 50, 20)
 let coalData = convertData(coalGeneration, totalGeneration, 21, -25);
 let windData = convertData(windGeneration, totalGeneration, 21, -25);
 let hydroData = convertData(hydroGeneration, totalGeneration, 21, -25);
@@ -10,12 +10,12 @@ let batteryData = convertData(batteryGeneration, totalGeneration, 21, -25);
 
 // Get the melodies
 
-let coalMelody = (createMelody(coalGeneration, totalGeneration, spotPrice, bpmData));
-let windMelody = (createMelody(windGeneration, totalGeneration, spotPrice, bpmData));
-let hydroMelody;
-let gasMelody;
-let solarMelody;
-let batteryMelody;
+let coalMelody = (createMelody(coalGeneration, totalGeneration, bpmData));
+let windMelody = (createMelody(windGeneration, totalGeneration, bpmData));
+let hydroMelody = (createMelody(hydroGeneration, totalGeneration, bpmData));
+let gasMelody = (createMelody(gasGeneration, totalGeneration, bpmData));
+let solarMelody = (createMelody(solarGeneration, totalGeneration, bpmData));
+let batteryMelody = (createMelody(solarGeneration, totalGeneration, bpmData));
 
 // Set up the tempo controls
 
@@ -27,13 +27,17 @@ Tone.Transport.timeSignature = 3; // Time signature
 const playMelody = (melody, instrument) => {
     let t = Tone.now();
     for (const note of melody) {
+        if (note[0] != 'rest') {
         instrument.triggerAttackRelease(note[0], Tone.Time(note[1]), t);
         t += Tone.Time(note[1]);
+        } else {
+            t += Tone.Time(note[1]);
+        }
     }
 }
 
 const priceLoop = new Tone.Loop((time) => {
-    price.triggerAttackRelease("G#1", "2n.");
+    price.triggerAttackRelease("G1", "2n.");
 }, "1n").start(0);
 
 // Set up UI functions
@@ -46,8 +50,13 @@ function playNote() {
     rampTempo(bpmData, 1000);
     rampVolume(windData, 1000, wind);
     rampVolume(coalData, 1000, coal);
+    rampVolume(hydroData, 1000, hydro);
     playMelody(coalMelody,coal);
     playMelody(windMelody,wind);
+    playMelody(hydroMelody,hydro);
+    // playMelody(solarMelody,solar);
+    // playMelody(gasMelody,gas);
+    // playMelody(batteryMelody,battery);
 }
 
 function stopNote() {

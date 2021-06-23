@@ -40,53 +40,56 @@ const createNote = (pitch, octave, noteLength) => {
 }
 
 // Iterate over the generation data
-const createMelody = (generationValues, noise, spotPrices, bpms) => {
-    if (generationValues && spotPrices && bpms) {
+const createMelody = (generationValues, noise, bpms) => {
+    if (generationValues && bpms) {
         let melody = [];
 
         generationValues.forEach((generationValue, i) => {
             let pitch;
             if (generationValue > 1) {
                 pitch = Math.log(generationValue + noise[i]).toString().charAt(4);
-
-                if (pitch == '0') {
-                    pitch = scale[3];
-                } else if (pitch == '1' || pitch == '2' || pitch == '3') {
+                if (pitch == '0' || pitch == '1') {
                     pitch = scale[0];
-                } else if (pitch == '4' || pitch == '5' || pitch == '6') {
-                    pitch = scale[1];
-                } else if (pitch == '7' || pitch == '8' || pitch == '9') {
+                } else if (pitch == '2' || pitch == '3') {
                     pitch = scale[2];
+                } else if (pitch == '4' || pitch == '5') {
+                    pitch = scale[2];
+                } else if (pitch == '6' || pitch == '7') {
+                    pitch = scale[3];
+                } else if (pitch == '8' || pitch == '9') {
+                    pitch = scale[4];
                 }
             } else {
-                pitch = scale[3];
+                pitch = 're';
             }
 
             let octave;
-            if (spotPrices[i] > 200) {
-                octave = octaves[0];
-            } else if (spotPrices[i] <= 200 && spotPrices[i] > 150) {
-                octave = octaves[1];
-            } else if (spotPrices[i] <= 150 && spotPrices[i] > 100) {
-                octave = octaves[2];
-            } else if (spotPrices[i] <= 100) {
-                octave = octaves[3];
+            let maxValue = generationValues.reduce(function (a, b) {
+                return Math.max(a, b);
+            });
+            if (pitch != 're') {
+                if (generationValue <= maxValue * (1 / 3)) {
+                    octave = octaves[0];
+                } else if (generationValue > maxValue * (1 / 3) && bpms[i] <= maxValue * (2 / 3)) {
+                    octave = octaves[1];
+                } else if (generationValue > maxValue * (2 / 3)) {
+                    octave = octaves[2];
+                }
+            } else {
+                octave = 'st';
             }
 
-            let noteLength = '4n';
-            // let maxValue = bpms.reduce(function (a, b) {
-            //     return Math.max(a, b);
-            // });
-            // if (bpms[i] <= maxValue * .25) {
-            //     noteLength = noteLengths[0];
-            // } else if (bpms[i] > maxValue * .25 && bpms[i] <= maxValue * .5) {
-            //     noteLength = noteLengths[1];
-            // } else if (bpms[i] > maxValue * .5 && bpms[i] <= maxValue * .75) {
-            //     noteLength = noteLengths[2];
-            // } else if (bpms[i] > maxValue * .75) {
-            //     noteLength = noteLengths[3];
-            // }
-
+            let noteLength;
+            maxValue = bpms.reduce(function (a, b) {
+                return Math.max(a, b);
+            });
+            if (bpms[i] <= maxValue * (1 / 3)) {
+                noteLength = noteLengths[0];
+            } else if (bpms[i] > maxValue * (1 / 3) && bpms[i] <= maxValue * (2 / 3)) {
+                noteLength = noteLengths[1];
+            } else if (bpms[i] > maxValue * (2 / 3)) {
+                noteLength = noteLengths[2];
+            }
 
             if (pitch && octave && noteLength) {
                 melody.push(createNote(pitch, octave, noteLength));
@@ -95,17 +98,6 @@ const createMelody = (generationValues, noise, spotPrices, bpms) => {
         return melody;
     }
 }
-
-// For each value:
-// LESS THAN <
-// GREATER THAN >
-// Get the spot price at the time - spot price determines octave
-// If spot price[i] is [1]over 150 [2]between 100-150 [3]between 50-100 [4]below 50
-//if value is zero, rest, if 1, ???, otherwise log(x), number to string, get 5th decimal point
-// if 5th decimal point is: [1]1-2-3 [2]4-5-6 [3]7-8-9 [4]0
-// If bpm[i] is [1]1-20% [2]21-40% [3]41-60% [4]61-80% [5]81-100%
-
-
 
 // Changes volume according to converted data source
 

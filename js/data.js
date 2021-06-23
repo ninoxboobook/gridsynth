@@ -1,8 +1,9 @@
-const scale = ['G#', 'B', 'D#', 'F#'];
+const scale = ['G', 'B', 'D', 'F#', 'A'];
+// ['F','A','C','Eb','G'];
 
-const octaves = ['2', '3', '4', '5'];
+const octaves = ['2', '3', '4'];
 
-const noteLengths = ['1n', '2n', '4n', '8n'];
+const noteLengths = ['1n', '2n', '4n'];
 
 const loopLengths = ['1m', '2m', '3m', '4m'];
 
