@@ -17,38 +17,20 @@ let gasMelody;
 let solarMelody;
 let batteryMelody;
 
-// Set the tempo controls
+// Set up the tempo controls
 
 Tone.Transport.bpm.value = bpmData[0]; // Initial tempo
 Tone.Transport.timeSignature = 3; // Time signature
 
-// Set the instrument loops
+// Set up the instrument loops
 
-const playMelody = (melody, instrument) => {
-    let t = Tone.now();
+const playMelody = (melody, instrument, offset) => {
+    let t = Tone.now() + offset;
     for (const note of melody) {
         instrument.triggerAttackRelease(note[0], Tone.Time(note[1]), t);
         t += Tone.Time(note[1]);
     }
 }
-
-// const loop = new Tone.Loop((time) => {
-//     let t = Tone.now();
-
-//     for (const note of windmelody) {
-//         wind.triggerAttackRelease(note[0], Tone.Time(note[1]), t);
-//         t += Tone.Time(note[1]);
-//     }
-// }, "800m").start(0);
-
-// const bassloop = new Tone.Loop((time) => {
-//     let t = Tone.now();
-
-//     for (const note of coalmelody) {
-//         coal.triggerAttackRelease(note[0], Tone.Time(note[1]), t);
-//         t += Tone.Time(note[1]);
-//     }
-// }, "1m").start(0);
 
 const priceLoop = new Tone.Loop((time) => {
     price.triggerAttackRelease("G#1", "2n.");
