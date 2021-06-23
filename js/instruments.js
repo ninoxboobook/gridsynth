@@ -49,10 +49,18 @@ let hydro = new Tone.Synth({
 }).toDestination();
 hydro.name = "Hydro";
 
-let solar = new Tone.Synth({
-    oscillator: {
-        type: "sine"
+// let solar = new Tone.Synth({
+//     oscillator: {
+//         type: "sine"
+//     },
+// }).toDestination();
+// solar.name = "Solar";
+
+let solar = new Tone.Sampler({
+    urls: {
+        G3: "9283__eliasheuninck__sol-3.wav",
     },
+    baseUrl: "/samples/musicbox/",
 }).toDestination();
 solar.name = "Solar";
 

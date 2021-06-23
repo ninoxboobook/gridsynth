@@ -1,6 +1,6 @@
 // Get the data points for conversion
 
-let bpmData = convertData(scheduledDemand, createMaxValueArray(scheduledDemand), 40, 20)
+let bpmData = convertData(scheduledDemand, createMaxValueArray(scheduledDemand), 60, 30)
 let coalData = convertData(coalGeneration, totalGeneration, 21, -25);
 let windData = convertData(windGeneration, totalGeneration, 21, -25);
 let hydroData = convertData(hydroGeneration, totalGeneration, 21, -25);
@@ -16,6 +16,8 @@ let hydroMelody = (createMelody(hydroGeneration, totalGeneration, bpmData));
 let gasMelody = (createMelody(gasGeneration, totalGeneration, bpmData));
 let solarMelody = (createMelody(solarGeneration, totalGeneration, bpmData));
 let batteryMelody = (createMelody(solarGeneration, totalGeneration, bpmData));
+
+// TODO: Assign instruments according to average fuel mix???
 
 // Set up the tempo controls
 
