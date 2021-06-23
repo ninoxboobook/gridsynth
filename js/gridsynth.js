@@ -24,8 +24,8 @@ Tone.Transport.timeSignature = 3; // Time signature
 
 // Set up the instrument loops
 
-const playMelody = (melody, instrument, offset) => {
-    let t = Tone.now() + offset;
+const playMelody = (melody, instrument) => {
+    let t = Tone.now();
     for (const note of melody) {
         instrument.triggerAttackRelease(note[0], Tone.Time(note[1]), t);
         t += Tone.Time(note[1]);

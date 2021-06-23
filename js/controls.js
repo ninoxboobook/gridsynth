@@ -73,19 +73,19 @@ const createMelody = (generationValues, noise, spotPrices, bpms) => {
                 octave = octaves[3];
             }
 
-            let noteLength;
-            let maxValue = bpms.reduce(function (a, b) {
-                return Math.max(a, b);
-            });
-            if (bpms[i] <= maxValue * .25) {
-                noteLength = noteLengths[0];
-            } else if (bpms[i] > maxValue * .25 && bpms[i] <= maxValue * .5) {
-                noteLength = noteLengths[1];
-            } else if (bpms[i] > maxValue * .5 && bpms[i] <= maxValue * .75) {
-                noteLength = noteLengths[2];
-            } else if (bpms[i] > maxValue * .75) {
-                noteLength = noteLengths[3];
-            }
+            let noteLength = '4n';
+            // let maxValue = bpms.reduce(function (a, b) {
+            //     return Math.max(a, b);
+            // });
+            // if (bpms[i] <= maxValue * .25) {
+            //     noteLength = noteLengths[0];
+            // } else if (bpms[i] > maxValue * .25 && bpms[i] <= maxValue * .5) {
+            //     noteLength = noteLengths[1];
+            // } else if (bpms[i] > maxValue * .5 && bpms[i] <= maxValue * .75) {
+            //     noteLength = noteLengths[2];
+            // } else if (bpms[i] > maxValue * .75) {
+            //     noteLength = noteLengths[3];
+            // }
 
 
             if (pitch && octave && noteLength) {

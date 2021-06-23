@@ -21,6 +21,11 @@ let coal = new Tone.Sampler({
 coal.name = "Coal";
 
 let wind = new Tone.Sampler({
+    // urls: {
+    //     G3: "piano_G3_pp_RR2.wav",
+    //     G4: "piano_G4_pp_RR2.wav",
+    // },
+    // baseUrl: "/samples/piano/",
     urls: {
         G3: "9283__eliasheuninck__sol-3.wav",
     },
