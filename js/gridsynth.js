@@ -10,12 +10,12 @@ let batteryData = convertData(batteryGeneration, totalGeneration, 21, -30);
 
 // Get the melodies
 
-let coalMelody = (createMelody(coalGeneration, totalGeneration, bpmData));
-let windMelody = (createMelody(windGeneration, totalGeneration, bpmData));
-let hydroMelody = (createMelody(hydroGeneration, totalGeneration, bpmData));
-let gasMelody = (createMelody(gasGeneration, totalGeneration, bpmData));
-let solarMelody = (createMelody(solarGeneration, totalGeneration, bpmData));
-let batteryMelody = (createMelody(solarGeneration, totalGeneration, bpmData));
+let coalMelody = (createMelody(coalGeneration, totalGeneration));
+let windMelody = (createMelody(windGeneration, totalGeneration));
+let hydroMelody = (createMelody(hydroGeneration, totalGeneration));
+let gasMelody = (createMelody(gasGeneration, totalGeneration));
+let solarMelody = (createMelody(solarGeneration, totalGeneration));
+let batteryMelody = (createMelody(solarGeneration, totalGeneration));
 
 // TODO: Assign instruments according to average fuel mix???
 

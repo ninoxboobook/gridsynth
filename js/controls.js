@@ -29,19 +29,20 @@ const convertData = (numerators, denominators, range, lowerBound) => {
     }
 }
 
-// Creates melody
+// Creates notes
 
-const createNote = (pitch, octave, noteLength) => {
-    if (pitch && octave && noteLength) {
+const createNote = (pitch, octave) => {
+    if (pitch && octave) {
         let note = [];
-        note.push(pitch.concat(octave), noteLength);
+        note.push(pitch.concat(octave), '4n');
         return note;
     }
 }
 
-// Iterate over the generation data
-const createMelody = (generationValues, noise, bpms) => {
-    if (generationValues && bpms) {
+// Creates a melody of notes based on generation data
+
+const createMelody = (generationValues, noise) => {
+    if (generationValues) {
         let melody = [];
 
         generationValues.forEach((generationValue, i) => {
@@ -70,7 +71,7 @@ const createMelody = (generationValues, noise, bpms) => {
             if (pitch != 're') {
                 if (generationValue <= maxValue * (1 / 3)) {
                     octave = octaves[0];
-                } else if (generationValue > maxValue * (1 / 3) && generationValue[i] <= maxValue * (2 / 3)) {
+                } else if (generationValue > maxValue * (1 / 3) && generationValue <= maxValue * (2 / 3)) {
                     octave = octaves[1];
                 } else if (generationValue > maxValue * (2 / 3)) {
                     octave = octaves[2];
@@ -79,20 +80,8 @@ const createMelody = (generationValues, noise, bpms) => {
                 octave = 'st';
             }
 
-            let noteLength = '4n';
-            // maxValue = bpms.reduce(function (a, b) {
-            //     return Math.max(a, b);
-            // });
-            // if (bpms[i] <= maxValue * (1 / 3)) {
-            //     noteLength = noteLengths[0];
-            // } else if (bpms[i] > maxValue * (1 / 3) && bpms[i] <= maxValue * (2 / 3)) {
-            //     noteLength = noteLengths[1];
-            // } else if (bpms[i] > maxValue * (2 / 3)) {
-            //     noteLength = noteLengths[2];
-            // }
-
-            if (pitch && octave && noteLength) {
-                melody.push(createNote(pitch, octave, noteLength));
+            if (pitch && octave) {
+                melody.push(createNote(pitch, octave));
             }
         })
         return melody;
@@ -120,12 +109,6 @@ const rampVolume = async (volumes, tick, instrument) => {
     }
 }
 
-// Controls spot price bassline with trends
-
-// Plays melodies at highest and lowest points
-
-// Adds percussion at certain bpmg
-
 // Changes tempo according to converted data source
 
 const setTempo = (tempo) => {
@@ -144,11 +127,8 @@ const rampTempo = async (tempos, tick) => {
     }
 }
 
-// Generates melodies
+// Controls spot price bassline with trends
 
-const generateMelody = (notes, measures) => {
-    if (notes && measures) {
-        let melody = [];
-        return melody;
-    }
-}
+// Plays melodies at highest and lowest points
+
+// Adds percussion at certain bpm
