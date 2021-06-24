@@ -1,12 +1,12 @@
 // Get the data points for conversion
 
 let bpmData = convertData(scheduledDemand, createMaxValueArray(scheduledDemand), 60, 30)
-let coalData = convertData(coalGeneration, totalGeneration, 21, -25);
-let windData = convertData(windGeneration, totalGeneration, 21, -25);
-let hydroData = convertData(hydroGeneration, totalGeneration, 21, -25);
-let gasData = convertData(gasGeneration, totalGeneration, 21, -25);
-let solarData = convertData(solarGeneration, totalGeneration, 21, -25);
-let batteryData = convertData(batteryGeneration, totalGeneration, 21, -25);
+let coalData = convertData(coalGeneration, totalGeneration, 21, -30);
+let windData = convertData(windGeneration, totalGeneration, 21, -30);
+let hydroData = convertData(hydroGeneration, totalGeneration, 21, -30);
+let gasData = convertData(gasGeneration, totalGeneration, 21, -30);
+let solarData = convertData(solarGeneration, totalGeneration, 21, -30);
+let batteryData = convertData(batteryGeneration, totalGeneration, 21, -30);
 
 // Get the melodies
 

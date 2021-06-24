@@ -70,7 +70,7 @@ const createMelody = (generationValues, noise, bpms) => {
             if (pitch != 're') {
                 if (generationValue <= maxValue * (1 / 3)) {
                     octave = octaves[0];
-                } else if (generationValue > maxValue * (1 / 3) && bpms[i] <= maxValue * (2 / 3)) {
+                } else if (generationValue > maxValue * (1 / 3) && generationValue[i] <= maxValue * (2 / 3)) {
                     octave = octaves[1];
                 } else if (generationValue > maxValue * (2 / 3)) {
                     octave = octaves[2];
