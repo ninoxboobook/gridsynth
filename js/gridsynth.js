@@ -26,7 +26,7 @@ Tone.Transport.timeSignature = 3; // Time signature
 
 // Set up the instrument loops
 
-const playMelody = (melody, instrument) => {
+const playMelody = async (melody, instrument) => {
     let t = Tone.now();
     for (const note of melody) {
         if (note[0] != 'rest') {
@@ -37,6 +37,21 @@ const playMelody = (melody, instrument) => {
         }
     }
 }
+
+// Setting up the melodies as parts
+
+const coalSequence = new Tone.Sequence((time, note) => {
+	coal.triggerAttackRelease(note, "4n", time);
+	// subdivisions are given as subarrays
+}, coalMelody, "4n").start(0);
+
+// var seq = new Tone.Sequence(callback, ["C3", "Eb3", "F4", "Bb4"], "8n");
+
+
+// const coalPart = new Tone.Part(((time, value) => {
+// 	// the value is an object which contains both the note and the velocity
+// 	coal.triggerAttackRelease(value.notation, value.noteLength, time);
+// }), coalMelody).start(0);
 
 // const priceLoop = new Tone.Loop((time) => {
 //     price.triggerAttackRelease("G1", "2n.");
@@ -56,9 +71,13 @@ function playNote() {
     rampVolume(solarData, 1000, solar);
     rampVolume(batteryData, 1000, battery);
     rampVolume(hydroData, 1000, hydro);
-    playMelody(coalMelody, coal);
-    playMelody(windMelody, wind);
-    playMelody(hydroMelody, hydro);
+    console.log(coalMelody);
+    // playMelody(coalMelody, coal);
+    // playMelody(windMelody, wind);
+    // playMelody(hydroMelody, hydro);
+    // playMelody(gasMelody, gas);
+    // playMelody(solarMelody, solar);
+    // playMelody(batteryMelody, hydro);
 }
 
 function stopNote() {

@@ -33,11 +33,31 @@ const convertData = (numerators, denominators, range, lowerBound) => {
 
 const createNote = (pitch, octave) => {
     if (pitch && octave) {
-        let note = [];
-        note.push(pitch.concat(octave), '4n');
+        let note;
+        note = pitch.concat(octave);
         return note;
     }
 }
+
+// const createNote = (pitch, octave) => {
+//     if (pitch && octave) {
+//         let note = [];
+//         note.push(pitch.concat(octave), '4n');
+//         return note;
+//     }
+// }
+
+// const createNoteObject = (pitch, octave, length, transportTime) => {
+//     if (pitch && octave) {
+//         let note;
+//         note = {
+//             time: transportTime,
+//             notation: pitch + octave,
+//             noteLength: length
+//         };
+//         return note;
+//     }
+// }
 
 // Creates a melody of notes based on generation data
 
@@ -80,9 +100,21 @@ const createMelody = (generationValues, noise) => {
                 octave = 'st';
             }
 
+            // let length = '4n';
+            // let transportTime;
+            // if (i == 0) {
+            //     transportTime = 0;
+            // } else {
+            //     transportTime = '+' + length;
+            // }
+
             if (pitch && octave) {
                 melody.push(createNote(pitch, octave));
             }
+
+            // if (pitch && octave) {
+            //     melody.push(createNoteObject(pitch, octave, length, transportTime));
+            // }
         })
         return melody;
     }
