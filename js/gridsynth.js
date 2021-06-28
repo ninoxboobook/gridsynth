@@ -24,19 +24,6 @@ let batteryMelody = (createMelody(solarGeneration, totalGeneration));
 Tone.Transport.bpm.value = bpmData[0]; // Initial tempo
 Tone.Transport.timeSignature = 3; // Time signature
 
-// Set up the instrument loops
-
-const playMelody = async (melody, instrument) => {
-    let t = Tone.now();
-    for (const note of melody) {
-        if (note[0] != 'rest') {
-            instrument.triggerAttackRelease(note[0], Tone.Time(note[1]), t);
-            t += Tone.Time(note[1]);
-        } else {
-            t += Tone.Time(note[1]);
-        }
-    }
-}
 
 // Setting up the melodies as parts
 
@@ -45,13 +32,31 @@ const coalSequence = new Tone.Sequence((time, note) => {
 	// subdivisions are given as subarrays
 }, coalMelody, "4n").start(0);
 
-// var seq = new Tone.Sequence(callback, ["C3", "Eb3", "F4", "Bb4"], "8n");
+const windSequence = new Tone.Sequence((time, note) => {
+	wind.triggerAttackRelease(note, "4n", time);
+	// subdivisions are given as subarrays
+}, windMelody, "4n").start("16n");
 
+const hydroSequence = new Tone.Sequence((time, note) => {
+	hydro.triggerAttackRelease(note, "4n", time);
+	// subdivisions are given as subarrays
+}, hydroMelody, "4n").start("8n");
 
-// const coalPart = new Tone.Part(((time, value) => {
-// 	// the value is an object which contains both the note and the velocity
-// 	coal.triggerAttackRelease(value.notation, value.noteLength, time);
-// }), coalMelody).start(0);
+const gasSequence = new Tone.Sequence((time, note) => {
+	gas.triggerAttackRelease(note, "4n", time);
+	// subdivisions are given as subarrays
+}, gasMelody, "4n").start("8n + 16n");
+
+const solarSequence = new Tone.Sequence((time, note) => {
+	solar.triggerAttackRelease(note, "4n", time);
+	// subdivisions are given as subarrays
+}, solarMelody, "4n").start("4n");
+
+const batterySequence = new Tone.Sequence((time, note) => {
+	battery.triggerAttackRelease(note, "4n", time);
+	// subdivisions are given as subarrays
+}, batteryMelody, "4n").start("4n + 16n");
+
 
 // const priceLoop = new Tone.Loop((time) => {
 //     price.triggerAttackRelease("G1", "2n.");
@@ -71,13 +76,7 @@ function playNote() {
     rampVolume(solarData, 1000, solar);
     rampVolume(batteryData, 1000, battery);
     rampVolume(hydroData, 1000, hydro);
-    console.log(coalMelody);
-    // playMelody(coalMelody, coal);
-    // playMelody(windMelody, wind);
-    // playMelody(hydroMelody, hydro);
-    // playMelody(gasMelody, gas);
-    // playMelody(solarMelody, solar);
-    // playMelody(batteryMelody, hydro);
+    console.log(solarMelody);
 }
 
 function stopNote() {
