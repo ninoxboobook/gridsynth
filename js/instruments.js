@@ -8,7 +8,7 @@ let price = new Tone.Sampler({
     attack: 1,
     release: 1,
     curve: "linear",
-    volume: -12,
+    volume: -16,
 }).toDestination();
 
 let coal = new Tone.Synth({
@@ -26,13 +26,6 @@ let coal = new Tone.Synth({
     }
 });
 coal.name = "Coal";
-
-// let coal = new Tone.Synth({
-//     oscillator: {
-//         type: "sine"
-//     },
-// }).toDestination();
-// coal.name = "Coal";
 
 let wind = new Tone.Synth({
     oscillator: {
@@ -60,13 +53,6 @@ let gas = new Tone.FMSynth({
 });
 gas.name = "Gas";
 
-// let gas = new Tone.Synth({
-//     oscillator: {
-//         type: "sine"
-//     },
-// }).toDestination();
-// gas.name = "Gas";
-
 let battery = new Tone.Sampler({
     urls: {
         G3: "9283__eliasheuninck__sol-3.wav",
@@ -75,12 +61,6 @@ let battery = new Tone.Sampler({
 }).toDestination();
 battery.name = "Battery";
 
-// let battery = new Tone.Synth({
-//     oscillator: {
-//         type: "sine"
-//     },
-// }).toDestination();
-// battery.name = "Battery";
 
 // let coal = new Tone.Sampler({
 //     urls: {
@@ -102,11 +82,15 @@ const distortion = new Tone.Distortion(0.1)
 
 wind.chain(pingpongDelay, Tone.Destination);
 coal.chain(distortion, Tone.Destination);
-gas.chain(Tone.Destination);
+gas.chain(chorus, Tone.Destination);
 compressor.toDestination();
 
 // Buffers
 
 const priceBuffer = new Tone.ToneAudioBuffer("/samples/singingbowl/singing_bowl.wav", () => {
-	console.log("loaded");
+	console.log("Price sampler loaded");
+});
+
+const batteryBuffer = new Tone.ToneAudioBuffer("/samples/musicbox/9283__eliasheuninck__sol-3.wav", () => {
+	console.log("Battery buffer loaded");
 });

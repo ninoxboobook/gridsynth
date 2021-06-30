@@ -33,17 +33,17 @@ const windSequence = new Tone.Sequence((time, note) => {
     wind.triggerAttackRelease(note, "4n", time);
 }, windMelody, "4n").start("16n");
 
-// const hydroSequence = new Tone.Sequence((time, note) => {
-//     hydro.triggerAttackRelease(note, "4n", time);
-// }, hydroMelody, "4n").start("8n");
+const hydroSequence = new Tone.Sequence((time, note) => {
+    hydro.triggerAttackRelease(note, "4n", time);
+}, hydroMelody, "4n").start("8n");
 
 const gasSequence = new Tone.Sequence((time, note) => {
     gas.triggerAttackRelease(note, "4n", time);
 }, gasMelody, "4n").start("8n + 16n");
 
-// const solarSequence = new Tone.Sequence((time, note) => {
-//     solar.triggerAttackRelease(note, "4n", time);
-// }, solarMelody, "4n").start("4n");
+const solarSequence = new Tone.Sequence((time, note) => {
+    solar.triggerAttackRelease(note, "4n", time);
+}, solarMelody, "4n").start("4n");
 
 // const batterySequence = new Tone.Sequence((time, note) => {
 //     battery.triggerAttackRelease(note, "4n", time);
@@ -52,12 +52,6 @@ const gasSequence = new Tone.Sequence((time, note) => {
 const priceSequence = new Tone.Sequence((time, note) => {
     price.triggerAttackRelease(note, "1m", time);
 }, bassLine, "1m").start(0);
-
-// const priceLoop = new Tone.Loop((time) => {
-//     price.triggerAttackRelease(["C2"], "2n.");
-// }, "1n").start(0);
-
-// TODO: Assign instruments according to average fuel mix???
 
 // Set up UI functions
 
@@ -73,6 +67,7 @@ function playNote() {
     rampVolume(solarData, 1000, solar);
     rampVolume(batteryData, 1000, battery);
     rampVolume(hydroData, 1000, hydro);
+    console.log(batteryMelody);
 }
 
 function stopNote() {

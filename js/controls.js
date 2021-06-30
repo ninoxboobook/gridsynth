@@ -17,7 +17,7 @@ const createMaxValueArray = (values) => {
     }
 }
 
-// Converts raw data into values within a specified range at a specified interval
+// Converts raw data into values within a specified range
 
 const convertData = (numerators, denominators, range, lowerBound) => {
     if (numerators && denominators && range && lowerBound) {
@@ -93,9 +93,7 @@ const createMelody = (generationValues, noise) => {
     }
 }
 
-// Creates spot price bassline notes
-
-// Creates spot price bassline
+// Creates a bass line that moves up or down according to spot price trend
 
 const getAverage = (values) => {
     let total = 0;
@@ -128,42 +126,43 @@ const createBassLine = () => {
     let i = 0;
     let bassLineIndex = 0;
     let bassLine = [];
-
-    for (i = 0; i < averageSpotPrices.length; i++) {
-        if (i == 0) {
-            bassLine.push(bassLineScale[bassLineIndex]);
-            bassLine.push(bassLineScale[bassLineIndex]);
-            bassLine.push(bassLineScale[bassLineIndex]);
-        } else {
-            if (averageSpotPrices[i] > averageSpotPrices[i - 1]) {
-                if (bassLineIndex < 5) {
-                    bassLineIndex++;
-                } else {
-                    bassLineIndex = 0;
-                }
-                bassLine.push(bassLineScale[bassLineIndex]);
-                bassLine.push(bassLineScale[bassLineIndex]);
-                bassLine.push(bassLineScale[bassLineIndex]);
-            } else if (averageSpotPrices[i] < averageSpotPrices[i - 1]) {
-                if (bassLineIndex > 0) {
-                    bassLineIndex--;
-                } else {
-                    bassLineIndex = 0;
-                }
+    if (averageSpotPrices) {
+        for (i = 0; i < averageSpotPrices.length; i++) {
+            if (i == 0) {
                 bassLine.push(bassLineScale[bassLineIndex]);
                 bassLine.push(bassLineScale[bassLineIndex]);
                 bassLine.push(bassLineScale[bassLineIndex]);
             } else {
-                bassLine.push(bassLineScale[bassLineIndex]);
-                bassLine.push(bassLineScale[bassLineIndex]);
-                bassLine.push(bassLineScale[bassLineIndex]);
+                if (averageSpotPrices[i] > averageSpotPrices[i - 1]) {
+                    if (bassLineIndex < 5) {
+                        bassLineIndex++;
+                    } else {
+                        bassLineIndex = 0;
+                    }
+                    bassLine.push(bassLineScale[bassLineIndex]);
+                    bassLine.push(bassLineScale[bassLineIndex]);
+                    bassLine.push(bassLineScale[bassLineIndex]);
+                } else if (averageSpotPrices[i] < averageSpotPrices[i - 1]) {
+                    if (bassLineIndex > 0) {
+                        bassLineIndex--;
+                    } else {
+                        bassLineIndex = 0;
+                    }
+                    bassLine.push(bassLineScale[bassLineIndex]);
+                    bassLine.push(bassLineScale[bassLineIndex]);
+                    bassLine.push(bassLineScale[bassLineIndex]);
+                } else {
+                    bassLine.push(bassLineScale[bassLineIndex]);
+                    bassLine.push(bassLineScale[bassLineIndex]);
+                    bassLine.push(bassLineScale[bassLineIndex]);
+                }
             }
         }
+        console.log(bassLine);
+        return bassLine;
     }
-    console.log(bassLine);
-    return bassLine;
 
-    // Decide the first line of the bassline
+    // TODO Decide the first line of the bassline
 }
 
 // Changes volume according to converted data source
@@ -204,9 +203,3 @@ const rampTempo = async (tempos, tick) => {
         }
     }
 }
-
-// Controls spot price bassline with trends
-
-// Plays melodies at highest and lowest points
-
-// Adds percussion at certain bpm
