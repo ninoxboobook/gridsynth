@@ -16,51 +16,48 @@ let hydroMelody = (createMelody(hydroGeneration, totalGeneration));
 let gasMelody = (createMelody(gasGeneration, totalGeneration));
 let solarMelody = (createMelody(solarGeneration, totalGeneration));
 let batteryMelody = (createMelody(solarGeneration, totalGeneration));
-
-// TODO: Assign instruments according to average fuel mix???
+let bassLine = createBassLine();
 
 // Set up the tempo controls
 
 Tone.Transport.bpm.value = bpmData[0]; // Initial tempo
 Tone.Transport.timeSignature = 3; // Time signature
 
-
 // Setting up the melodies as parts
 
 const coalSequence = new Tone.Sequence((time, note) => {
-	coal.triggerAttackRelease(note, "4n", time);
-	// subdivisions are given as subarrays
+    coal.triggerAttackRelease(note, "4n", time);
 }, coalMelody, "4n").start(0);
 
 const windSequence = new Tone.Sequence((time, note) => {
-	wind.triggerAttackRelease(note, "4n", time);
-	// subdivisions are given as subarrays
+    wind.triggerAttackRelease(note, "4n", time);
 }, windMelody, "4n").start("16n");
 
-const hydroSequence = new Tone.Sequence((time, note) => {
-	hydro.triggerAttackRelease(note, "4n", time);
-	// subdivisions are given as subarrays
-}, hydroMelody, "4n").start("8n");
+// const hydroSequence = new Tone.Sequence((time, note) => {
+//     hydro.triggerAttackRelease(note, "4n", time);
+// }, hydroMelody, "4n").start("8n");
 
 const gasSequence = new Tone.Sequence((time, note) => {
-	gas.triggerAttackRelease(note, "4n", time);
-	// subdivisions are given as subarrays
+    gas.triggerAttackRelease(note, "4n", time);
 }, gasMelody, "4n").start("8n + 16n");
 
-const solarSequence = new Tone.Sequence((time, note) => {
-	solar.triggerAttackRelease(note, "4n", time);
-	// subdivisions are given as subarrays
-}, solarMelody, "4n").start("4n");
+// const solarSequence = new Tone.Sequence((time, note) => {
+//     solar.triggerAttackRelease(note, "4n", time);
+// }, solarMelody, "4n").start("4n");
 
-const batterySequence = new Tone.Sequence((time, note) => {
-	battery.triggerAttackRelease(note, "4n", time);
-	// subdivisions are given as subarrays
-}, batteryMelody, "4n").start("4n + 16n");
+// const batterySequence = new Tone.Sequence((time, note) => {
+//     battery.triggerAttackRelease(note, "4n", time);
+// }, batteryMelody, "4n").start("4n + 16n");
 
+const priceSequence = new Tone.Sequence((time, note) => {
+    price.triggerAttackRelease(note, "1m", time);
+}, bassLine, "1m").start(0);
 
 // const priceLoop = new Tone.Loop((time) => {
-//     price.triggerAttackRelease("G1", "2n.");
+//     price.triggerAttackRelease(["C2"], "2n.");
 // }, "1n").start(0);
+
+// TODO: Assign instruments according to average fuel mix???
 
 // Set up UI functions
 
@@ -76,7 +73,6 @@ function playNote() {
     rampVolume(solarData, 1000, solar);
     rampVolume(batteryData, 1000, battery);
     rampVolume(hydroData, 1000, hydro);
-    console.log(solarMelody);
 }
 
 function stopNote() {

@@ -93,6 +93,79 @@ const createMelody = (generationValues, noise) => {
     }
 }
 
+// Creates spot price bassline notes
+
+// Creates spot price bassline
+
+const getAverage = (values) => {
+    let total = 0;
+    let average;
+    if (values) {
+        values.forEach((value, i) => {
+            total += value;
+        });
+        average = total / values.length;
+        return average;
+    }
+}
+
+const averageArray = (array, segmentSize) => {
+    let i = 0;
+    let arrayLength = array.length;
+    let averagedArray = [];
+    if (array && segmentSize) {
+        for (i = 0; i < arrayLength; i += segmentSize) {
+            let segment = array.slice(i, i + segmentSize);
+            let segmentAverage = Math.round(getAverage(segment));
+            averagedArray.push(segmentAverage);
+        }
+        return averagedArray;
+    }
+}
+
+const createBassLine = () => {
+    let averageSpotPrices = averageArray(spotPrice, 12);
+    let i = 0;
+    let bassLineIndex = 0;
+    let bassLine = [];
+
+    for (i = 0; i < averageSpotPrices.length; i++) {
+        if (i == 0) {
+            bassLine.push(bassLineScale[bassLineIndex]);
+            bassLine.push(bassLineScale[bassLineIndex]);
+            bassLine.push(bassLineScale[bassLineIndex]);
+        } else {
+            if (averageSpotPrices[i] > averageSpotPrices[i - 1]) {
+                if (bassLineIndex < 5) {
+                    bassLineIndex++;
+                } else {
+                    bassLineIndex = 0;
+                }
+                bassLine.push(bassLineScale[bassLineIndex]);
+                bassLine.push(bassLineScale[bassLineIndex]);
+                bassLine.push(bassLineScale[bassLineIndex]);
+            } else if (averageSpotPrices[i] < averageSpotPrices[i - 1]) {
+                if (bassLineIndex > 0) {
+                    bassLineIndex--;
+                } else {
+                    bassLineIndex = 0;
+                }
+                bassLine.push(bassLineScale[bassLineIndex]);
+                bassLine.push(bassLineScale[bassLineIndex]);
+                bassLine.push(bassLineScale[bassLineIndex]);
+            } else {
+                bassLine.push(bassLineScale[bassLineIndex]);
+                bassLine.push(bassLineScale[bassLineIndex]);
+                bassLine.push(bassLineScale[bassLineIndex]);
+            }
+        }
+    }
+    console.log(bassLine);
+    return bassLine;
+
+    // Decide the first line of the bassline
+}
+
 // Changes volume according to converted data source
 
 const setVolume = (volume, instrument) => {

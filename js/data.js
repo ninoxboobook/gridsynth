@@ -2,6 +2,8 @@ const scale = ['G', 'B', 'C', 'D', 'E'];
 // ['G', 'B', 'D', 'F#', 'A'];
 // ['F','A','C','Eb','G'];
 
+const bassLineScale = ['C1', 'E1', 'F1', 'G1', 'A1', 'C2'];
+
 const octaves = ['2', '3', '4'];
 
 const noteLengths = ['1n', '2n', '4n'];
