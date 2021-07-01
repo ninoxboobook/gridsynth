@@ -10,6 +10,6 @@ Data comes from the [National Energy Market](https://aemo.com.au/en/energy-syste
 
 ## Demo
 
-This current version expresses scheduled demand, generation by fuel type, and fuel mix.
+This current version expresses scheduled demand, generation by fuel type, fuel mix, and spot price.
 
 [Listen to gridsynth](http://rihanari.es/gridsynth/)

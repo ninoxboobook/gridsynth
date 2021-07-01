@@ -17,8 +17,13 @@
                 var canvas = createCanvas(windowWidth, windowHeight);
                 canvas.parent("p5-wrapper");
             }
+            let phase = 0;
 
             function draw() {
+                if (playing) {
+                    fill(255);
+                    ellipse(30, 40, 50, 50);
+                }
             }
 
             function windowResized() {

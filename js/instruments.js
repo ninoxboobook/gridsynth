@@ -8,7 +8,7 @@ let price = new Tone.Sampler({
     attack: 1,
     release: 1,
     curve: "linear",
-    volume: -16,
+    volume: -14,
 }).toDestination();
 
 let coal = new Tone.Synth({
@@ -34,11 +34,13 @@ let wind = new Tone.Synth({
 }).toDestination();
 wind.name = "Wind";
 
-let hydro = new Tone.Synth({
-    oscillator: {
-        type: "sine"
+let hydro = new Tone.Sampler({
+    urls: {
+        G3: "piano_G3_pp_RR2.wav",
+        G4: "piano_G4_pp_RR2.wav",
     },
-}).toDestination();
+    baseUrl: "/samples/piano/",
+});
 hydro.name = "Hydro";
 
 let solar = new Tone.Synth({
@@ -55,22 +57,16 @@ gas.name = "Gas";
 
 let battery = new Tone.Sampler({
     urls: {
-        G3: "9283__eliasheuninck__sol-3.wav",
+        C1: "MOHorn_sus_C1_v1_1.wav",
+        A2: "MOHorn_sus_A2_v2_1.wav",
+        C3: "MOHorn_sus_C3_v1_1.wav",
+        D4: "MOHorn_sus_D4_v1_1.wav",
     },
-    baseUrl: "/samples/musicbox/",
-}).toDestination();
+    baseUrl: "/samples/frenchhorn/",
+    curve: "linear",
+    attack: 0.1,
+});
 battery.name = "Battery";
-
-
-// let coal = new Tone.Sampler({
-//     urls: {
-//         G3: "piano_G3_pp_RR2.wav",
-//         G4: "piano_G4_pp_RR2.wav",
-//     },
-//     baseUrl: "/samples/piano/",
-// }).toDestination();
-// coal.name = "Coal";
-
 
 
 // Effects rack
@@ -81,16 +77,34 @@ const chorus = new Tone.Chorus(4, 2.5, 0.5);
 const distortion = new Tone.Distortion(0.1)
 
 wind.chain(pingpongDelay, Tone.Destination);
-coal.chain(distortion, Tone.Destination);
+coal.chain(Tone.Destination);
 gas.chain(chorus, Tone.Destination);
+hydro.chain(chorus, Tone.Destination);
+battery.chain(Tone.Destination);
 compressor.toDestination();
 
 // Buffers
 
 const priceBuffer = new Tone.ToneAudioBuffer("/samples/singingbowl/singing_bowl.wav", () => {
-	console.log("Price sampler loaded");
+    console.log("Price sampler loaded");
 });
 
-const batteryBuffer = new Tone.ToneAudioBuffer("/samples/musicbox/9283__eliasheuninck__sol-3.wav", () => {
-	console.log("Battery buffer loaded");
+// const batteryBuffer = new Tone.ToneAudioBuffer("/samples/musicbox/9283__eliasheuninck__sol-3.wav", () => {
+//     console.log("Battery buffer loaded");
+// });
+
+const batteryBuffer = new Tone.ToneAudioBuffers({
+    C1: "/samples/frenchhorn/MOHorn_sus_C1_v1_1.wav",
+    A2: "/samples/frenchhorn/MOHorn_sus_A2_v2_1.wav",
+    C3: "/samples/frenchhorn/MOHorn_sus_C3_v1_1.wav",
+    D4: "/samples/frenchhorn/MOHorn_sus_D4_v1_1.wav",
+}, () => {
+    console.log("Battery buffer loaded");
+});
+
+const hydroBuffer = new Tone.ToneAudioBuffers({
+    G3: "/samples/piano/piano_G3_pp_RR2.wav",
+    G4: "/samples/piano/piano_G4_pp_RR2.wav",
+}, () => {
+    console.log("Hydro buffer loaded");
 });
