@@ -31,6 +31,21 @@ body {
     display: flex;
 }
 
+.skip-link {
+    background: #fff;
+    color: #8446DC;
+    font-weight: 700;
+    left: 0;
+    padding: 1em;
+    position: absolute;
+    transform: translateY(-100%);
+    transition: transform 0.3s;
+  }
+  
+  .skip-link:focus {
+    transform: translateY(0%);
+  }
+
 header {
     position: absolute;
     left: 0;
@@ -48,6 +63,8 @@ nav ul {
 nav ul li {
     font-size: 1.5em;
     font-weight: 400;
+    display: inline-block;
+    padding: 0 .5em;
 }
 
 nav a {
@@ -70,7 +87,7 @@ button {
     min-width: 140px;
     padding: 16px 32px;
     transition: all ease-in-out .2s;
-    margin: 0 4px;
+    margin: 8px 4px;
 }
 
 button:hover {

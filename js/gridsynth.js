@@ -54,7 +54,6 @@ const batterySequence = new Tone.Sequence(async (time, note) => {
         await sleep(Tone.Time("4n"));
     } else {
         battery.triggerAttackRelease(note, "4n", time);
-        console.log(note);
     }
 }, batteryMelody, "4n").start("4n + 16n");
 

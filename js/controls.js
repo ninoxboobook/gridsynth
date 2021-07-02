@@ -158,7 +158,6 @@ const createBassLine = () => {
                 }
             }
         }
-        console.log(bassLine);
         return bassLine;
     }
 
