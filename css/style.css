@@ -31,7 +31,30 @@ body {
     display: flex;
 }
 
-.content {
+header {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 998;
+    padding: 1.5em 2.5em 0 2.5em;
+    display: flex;
+    justify-content: space-between;
+}
+
+nav ul {
+    list-style-type: none;
+}
+
+nav ul li {
+    font-size: 1.5em;
+    font-weight: 400;
+}
+
+nav a {
+    color: #ffffff;
+}
+
+main {
     width: 80%;
     margin: auto;
     overflow: auto;
@@ -47,7 +70,7 @@ button {
     min-width: 140px;
     padding: 16px 32px;
     transition: all ease-in-out .2s;
-    margin: 0 8px 12px 0;
+    margin: 0 4px;
 }
 
 button:hover {
@@ -95,7 +118,7 @@ button.emphasis:hover::before {
 
 
 .display {
-    font-size: 8em;
+    font-size: 3em;
     font-weight: bold;
     text-transform: lowercase;
     margin-top: 0;

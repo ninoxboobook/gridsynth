@@ -26,11 +26,13 @@
             function setup() {
                 var canvas = createCanvas(windowWidth, windowHeight);
                 canvas.parent("p5-wrapper");
+                angleMode(DEGREES);
+                frameRate(30);
             }
             var coalVolHistory = [];
 
             function draw() {
-                let coalVol = coal.volume.value;
+                let coalVol = coal.getLevelAtTime(Tone.now());
                 coalVolHistory.push(coalVol);
                 if (windowWidth < 480) {
                     background(backgroundMobile);
@@ -39,17 +41,26 @@
                 } else {
                     background(backgroundDesktop);
                 }
-                stroke(0);
+
+                stroke(255);
                 noFill();
+                strokeJoin(ROUND);
+                strokeWeight(2);
+                translate(width / 2, height / 2);
                 beginShape();
-                for (var i = 0; i < coalVolHistory.length; i++) {
-                    let y = map(coalVolHistory[i], -9, -30, (height / 2), (0 + height / 4));
-                    vertex(i, y);
+                for (var i = 0; i < 360; i++) {
+                    let r = map(coalVolHistory[i], 0, 1, 200, 220);
+                    let x = r * cos(i);
+                    let y = r * sin(i);
+
+                    vertex(x, y);
                 }
                 endShape();
-                if (coalVolHistory.length > width) {
+
+                if (coalVolHistory.length > 360) {
                     coalVolHistory.splice(0, 1);
                 }
+
             }
 
             function windowResized() {
@@ -58,11 +69,18 @@
         </script>
     </div>
     <div id="content-wrapper">
-        <div class="content">
+        <header role="banner">
             <h1 class="display">Gridsynth</h1>
+            <nav role="navigation" aria-label="Main menu">
+                <ul>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main role="main">
             <button id="play-button" class="emphasis">Play</button>
             <button id="stop-button">Stop</button>
-        </div>
+        </main>
     </div>
 
     <script src="/js/gridsynth.js"></script>
