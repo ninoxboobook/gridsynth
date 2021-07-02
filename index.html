@@ -13,26 +13,32 @@
 <body>
     <div id="p5-wrapper">
         <script>
-            const Y_AXIS = 1;
-            const X_AXIS = 2;
-            let b1, b2, c1, c2;
+            let backgroundDesktop;
+            let backgroundTablet;
+            let backgroundMobile;
+
+            function preload() {
+                backgroundDesktop = loadImage('/assets/gridsynth-bg-desktop.png');
+                backgroundTablet = loadImage('/assets/gridsynth-bg-tablet.png');
+                backgroundMobile = loadImage('/assets/gridsynth-bg-mobile.png');
+            }
 
             function setup() {
                 var canvas = createCanvas(windowWidth, windowHeight);
                 canvas.parent("p5-wrapper");
-                b1 = color(255);
-                b2 = color(0);
-                c1 = color(204, 102, 0);
-                c2 = color(0, 102, 153);
             }
             var coalVolHistory = [];
 
             function draw() {
-                setGradient(0, 0, width / 2, height, b1, b2, X_AXIS);
-                setGradient(width / 2, 0, width / 2, height, b2, b1, X_AXIS);
                 let coalVol = coal.volume.value;
                 coalVolHistory.push(coalVol);
-                // background('rgba(0,255,0, 0.25)');
+                if (windowWidth < 480) {
+                    background(backgroundMobile);
+                } else if (windowWidth >= 480 && windowWidth < 768) {
+                    background(backgroundTablet);
+                } else {
+                    background(backgroundDesktop);
+                }
                 stroke(0);
                 noFill();
                 beginShape();
@@ -43,29 +49,6 @@
                 endShape();
                 if (coalVolHistory.length > width) {
                     coalVolHistory.splice(0, 1);
-                }
-
-            }
-
-            function setGradient(x, y, w, h, c1, c2, axis) {
-                noFill();
-
-                if (axis === Y_AXIS) {
-                    // Top to bottom gradient
-                    for (let i = y; i <= y + h; i++) {
-                        let inter = map(i, y, y + h, 0, 1);
-                        let c = lerpColor(c1, c2, inter);
-                        stroke(c);
-                        line(x, i, x + w, i);
-                    }
-                } else if (axis === X_AXIS) {
-                    // Left to right gradient
-                    for (let i = x; i <= x + w; i++) {
-                        let inter = map(i, x, x + w, 0, 1);
-                        let c = lerpColor(c1, c2, inter);
-                        stroke(c);
-                        line(i, y, i, y + h);
-                    }
                 }
             }
 
