@@ -3,9 +3,7 @@ body {
     color: #fff;
     font-size: 16px;
     background:
-        linear-gradient(#8446DC, transparent),
-        linear-gradient(to top left, #C97EE7, #6932E7, transparent),
-        linear-gradient(to top right, #5385f5, transparent);
+        linear-gradient(#703de4, #8e57d7);
     background-blend-mode: screen;
     background-size: cover;
     background-repeat: no-repeat;

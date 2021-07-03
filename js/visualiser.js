@@ -14,9 +14,9 @@ function CurrentGeneration(generationValues) {
     this.display = function () {
         this.value = generationValues[this.timeIndex];
         console.log(this.value);
-        if (this.timeIndex < generationValues.length) {
-        this.timeIndex++;
-        console.log(this.timeIndex);
+        if (this.timeIndex < generationValues.length - 1) {
+            this.timeIndex++;
+            console.log(this.timeIndex);
         } else {
             this.timeIndex = 0;
             console.log(this.timeIndex);
@@ -30,6 +30,7 @@ let gasCurrentGeneration = new CurrentGeneration(gasGeneration);
 let hydroCurrentGeneration = new CurrentGeneration(hydroGeneration);
 let solarCurrentGeneration = new CurrentGeneration(solarGeneration);
 let batteryCurrentGeneration = new CurrentGeneration(batteryGeneration);
+let totalCurrentGeneration = new CurrentGeneration(totalGeneration);
 let maxGeneration = totalGeneration.reduce(function (a, b) {
     return Math.max(a, b);
 });
@@ -58,6 +59,10 @@ let batteryGenerationLoop = new Tone.Loop((time) => {
     batteryCurrentGeneration.display();
 }, "4n").start(0);
 
+let totalGenerationLoop = new Tone.Loop((time) => {
+    totalCurrentGeneration.display();
+}, "4n").start(0);
+
 
 function drawVisual(generationHistory, currentGeneration) {
     let generation = currentGeneration.value;
@@ -65,7 +70,7 @@ function drawVisual(generationHistory, currentGeneration) {
 
     beginShape();
     for (var i = 0; i < 360; i++) {
-        let r = map(generationHistory[i], 0, maxGeneration, 200, 450);
+        let r = map(generationHistory[i], 0, maxGeneration, 200, 400);
         let x = r * cos(i);
         let y = r * sin(i);
 
@@ -98,14 +103,16 @@ let gasGenerationHistory = [];
 let hydroGenerationHistory = [];
 let solarGenerationHistory = [];
 let batteryGenerationHistory = [];
+let totalGenerationHistory = [];
 
 function draw() {
 
     setBackground();
-    stroke(255);
-    noFill();
+    stroke('rgba(255,255,255, 0.5)');
+    fill('rgba(255,255,255, 0.1)');
+    // noFill();
     strokeJoin(ROUND);
-    strokeWeight(2);
+    // strokeWeight(2);
     translate(width / 2, height / 2);
 
     drawVisual(coalGenerationHistory, coalCurrentGeneration);
@@ -114,6 +121,11 @@ function draw() {
     drawVisual(hydroGenerationHistory, hydroCurrentGeneration);
     drawVisual(solarGenerationHistory, solarCurrentGeneration);
     drawVisual(batteryGenerationHistory, batteryCurrentGeneration);
+    drawVisual(totalGenerationHistory, totalCurrentGeneration);
+
+    erase();
+    ellipse(0, 0, 402);
+    noErase();
 
 }
 
@@ -161,9 +173,9 @@ function setBackground() {
 //     }
 // }
 
-   // drawVisual(coal, coalVolumeHistory);
-    // drawVisual(wind, windVolumeHistory);
-    // drawVisual(gas, gasVolumeHistory);
-    // // drawVisual(hydro, hydroVolumeHistory);
-    // drawVisual(solar, solarVolumeHistory);
-    // drawVisual(battery, batteryVolumeHistory);
+// drawVisual(coal, coalVolumeHistory);
+// drawVisual(wind, windVolumeHistory);
+// drawVisual(gas, gasVolumeHistory);
+// // drawVisual(hydro, hydroVolumeHistory);
+// drawVisual(solar, solarVolumeHistory);
+// drawVisual(battery, batteryVolumeHistory);
