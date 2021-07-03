@@ -61,7 +61,6 @@ const priceSequence = new Tone.Sequence((time, note) => {
     price.triggerAttackRelease(note, "1m", time);
 }, bassLine, "1m").start(0);
 
-
 // Set up UI functions
 
 var playing = false;
