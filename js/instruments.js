@@ -42,11 +42,15 @@ let hydro = new Tone.Sampler({
 });
 hydro.name = "Hydro";
 
-let solar = new Tone.Synth({
-    oscillator: {
-        type: "sine"
+let solar = new Tone.Sampler({
+    urls: {
+        C3: "cello_C3_short.mp3",
+        D4: "cello_D4_short.mp3",
     },
-}).toDestination();
+    baseUrl: "/samples/cello/",
+    curve: "linear",
+    attack: 0.1,
+});
 solar.name = "Solar";
 
 let gas = new Tone.FMSynth({
@@ -80,6 +84,7 @@ coal.chain(Tone.Destination);
 gas.chain(chorus, Tone.Destination);
 hydro.chain(chorus, Tone.Destination);
 battery.chain(Tone.Destination);
+solar.chain(Tone.Destination);
 compressor.toDestination();
 
 // Buffers
@@ -102,4 +107,11 @@ const hydroBuffer = new Tone.ToneAudioBuffers({
     G4: "/samples/piano/piano_G4_pp_RR2.wav",
 }, () => {
     console.log("Hydro buffer loaded");
+});
+
+const solarBuffer = new Tone.ToneAudioBuffers({
+    C3: "/samples/cello/cello_C3_short.mp3",
+    D4: "/samples/cello/cello_D4_short.mp3",
+}, () => {
+    console.log("Solar buffer loaded");
 });

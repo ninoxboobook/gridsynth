@@ -85,8 +85,12 @@ const gasSequence = new Tone.Sequence((time, note) => {
     gas.triggerAttackRelease(note, "4n", time);
 }, gasMelody, "4n").start("8n + 16n");
 
-const solarSequence = new Tone.Sequence((time, note) => {
-    solar.triggerAttackRelease(note, "4n", time);
+const solarSequence = new Tone.Sequence(async (time, note) => {
+    if (note == 0) {
+        await sleep(Tone.Time("4n"));
+    } else {
+        solar.triggerAttackRelease(note, "4n", time);
+    }
 }, solarMelody, "4n").start("4n");
 
 const batterySequence = new Tone.Sequence(async (time, note) => {

@@ -85,7 +85,7 @@ button {
     min-width: 140px;
     padding: 16px 32px;
     transition: all ease-in-out .2s;
-    margin: 8px 4px;
+    margin: 8px 4px 24px 4px;
 }
 
 button:hover {
