@@ -168,7 +168,6 @@ const createBassLine = () => {
 
 const setVolume = (volume, instrument) => {
     instrument.volume.value = volume;
-    // console.log(instrument + " volume: " + instrument.volume.value);
 }
 
 function CurrentVolume(volumes, instrument) {
@@ -185,44 +184,10 @@ function CurrentVolume(volumes, instrument) {
                 } else {
                     this.timeIndex = 0;
                 }
-            } else {
-                setVolume(this.value, instrument); // Set the initial volume value of the instrument
             }
         }
     }
 }
-
-// const rampVolume2 = (volumes, instrument) => {
-//     if (volumes && instrument) {
-//         // Set the initial volume value of the instrument
-//         setVolume(volumes[volumeIndex], instrument);
-//         if (playing) {
-//             const newVolume = Math.min(Math.max(parseInt(volumes[volumeIndex]), -50), 0); // Ramp the volume up or down according to the volume data, clamped to protect your speakers from rogue data
-//             setVolume(newVolume, instrument);
-//             console.log("[" + volumeIndex + "] " + instrument + " volume: " + instrument.volume.value);
-//             if (volumeIndex < volumes.length - 1) {
-//                 volumeIndex++
-//             } else {
-//                 volumeIndex = 0;
-//             }
-//         }
-//     }
-// }
-
-
-// const rampVolume = async (volumes, tick, instrument) => {
-//     if (volumes && tick && instrument) {
-//         // Set the initial volume value of the instrument
-//         setVolume(volumes[0], instrument)
-//         for (let i = 0; i < volumes.length; i++) {
-//             if (playing) {
-//                 const newVolume = Math.min(Math.max(parseInt(volumes[i]), -50), 0); // Ramp the volume up or down according to the volume data, clamped to protect your speakers from rogue data
-//                 setVolume(newVolume, instrument);
-//                 await sleep(tick);
-//             }
-//         };
-//     }
-// }
 
 // Changes tempo according to converted data source
 

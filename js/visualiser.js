@@ -29,34 +29,16 @@ let maxGeneration = totalGeneration.reduce(function (a, b) {
     return Math.max(a, b);
 });
 
-let coalGenerationLoop = new Tone.Loop((time) => {
+let displayLoop = new Tone.Loop((time) => {
+    console.log(coalCurrentGeneration.timeIndex);
     coalCurrentGeneration.display();
-}, "4n").start(0);
-
-let windGenerationLoop = new Tone.Loop((time) => {
     windCurrentGeneration.display();
-}, "4n").start(0);
-
-let gasGenerationLoop = new Tone.Loop((time) => {
     gasCurrentGeneration.display();
-}, "4n").start(0);
-
-let hydroGenerationLoop = new Tone.Loop((time) => {
     hydroCurrentGeneration.display();
-}, "4n").start(0);
-
-let solarGenerationLoop = new Tone.Loop((time) => {
     solarCurrentGeneration.display();
-}, "4n").start(0);
-
-let batteryGenerationLoop = new Tone.Loop((time) => {
     batteryCurrentGeneration.display();
-}, "4n").start(0);
-
-let totalGenerationLoop = new Tone.Loop((time) => {
     totalCurrentGeneration.display();
 }, "4n").start(0);
-
 
 function drawVisual(generationHistory, currentGeneration) {
     let generation = currentGeneration.value;

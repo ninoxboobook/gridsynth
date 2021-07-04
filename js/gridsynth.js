@@ -8,7 +8,8 @@ let gasData = convertData(gasGeneration, totalGeneration, 21, -30);
 let solarData = convertData(solarGeneration, totalGeneration, 21, -30);
 let batteryData = convertData(batteryGeneration, totalGeneration, 21, -30);
 
-// Get the melodies
+
+// Create the melodies
 
 let coalMelody = (createMelody(coalGeneration, totalGeneration));
 let windMelody = (createMelody(windGeneration, totalGeneration));
@@ -27,7 +28,23 @@ let bpmLoop = new Tone.Loop((time) => {
     rampTempo(bpmData);
 }, "4n").start(0);
 
+
 // Volume controls
+
+let instruments = [coal, wind, gas, hydro, solar, battery];
+let volumeData = [coalData, windData, gasData, hydroData, solarData, batteryData];
+
+function setInitialVolume() {
+    instruments.forEach((instrument, i) => {
+       for (let j = 0; j < 1; j++) {
+            if (j < 1) {
+                setVolume(volumeData[i][j], instrument);
+            }
+        }; 
+    });
+}
+
+setInitialVolume();
 
 let coalCurrentVolume = new CurrentVolume(coalData, coal);
 let windCurrentVolume = new CurrentVolume(windData, wind);
@@ -45,8 +62,8 @@ let volumeLoop = new Tone.Loop((time) => {
     batteryCurrentVolume.ramp();
 }, "4n").start(0);
 
-// Setting up the melodies as parts
 
+// Set up the melodies as sequences
 
 const coalSequence = new Tone.Sequence((time, note) => {
     coal.triggerAttackRelease(note, "4n", time);
@@ -94,7 +111,7 @@ function playNote() {
     Tone.Transport.start();
 }
 
-// let currentGenerations = [coalCurrentGeneration, windCurrentGeneration, gasCurrentGeneration, hydroCurrentGeneration, solarCurrentGeneration, batteryCurrentGeneration];
+let currentGenerations = [coalCurrentGeneration, windCurrentGeneration, gasCurrentGeneration, hydroCurrentGeneration, solarCurrentGeneration, batteryCurrentGeneration];
 let currentInstrumentVolumes = [coalCurrentVolume, windCurrentVolume, gasCurrentVolume, hydroCurrentVolume, solarCurrentVolume, batteryCurrentVolume];
 
 function stopNote() {
@@ -102,6 +119,9 @@ function stopNote() {
     tempoIndex = 0;
     currentInstrumentVolumes.forEach((currentInstrumentVolume, i) => {
         currentInstrumentVolume.timeIndex = 0;
+    });
+    currentGenerations.forEach((currentGenerationSource, i) => {
+        currentGenerationSource.timeIndex = 0;
     });
 }
 
