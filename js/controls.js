@@ -171,19 +171,58 @@ const setVolume = (volume, instrument) => {
     // console.log(instrument + " volume: " + instrument.volume.value);
 }
 
-const rampVolume = async (volumes, tick, instrument) => {
-    if (volumes && tick && instrument) {
-        // Set the initial volume value of the instrument
-        setVolume(volumes[0], instrument)
-        for (let i = 0; i < volumes.length; i++) {
+function CurrentVolume(volumes, instrument) {
+    this.value;
+    this.timeIndex = 0;
+    this.ramp = function () {
+        this.value = Math.min(Math.max(parseInt(volumes[this.timeIndex]), -50), 0);
+        if (volumes && instrument) {
             if (playing) {
-                const newVolume = Math.min(Math.max(parseInt(volumes[i]), -50), 0); // Ramp the volume up or down according to the volume data, clamped to protect your speakers from rogue data
-                setVolume(newVolume, instrument);
-                await sleep(tick);
+                setVolume(this.value, instrument);
+                console.log("[" + this.timeIndex + "] " + instrument + " volume: " + instrument.volume.value);
+                if (this.timeIndex < volumes.length - 1) {
+                    this.timeIndex++;
+                } else {
+                    this.timeIndex = 0;
+                }
+            } else {
+                setVolume(this.value, instrument); // Set the initial volume value of the instrument
             }
-        };
+        }
     }
 }
+
+// const rampVolume2 = (volumes, instrument) => {
+//     if (volumes && instrument) {
+//         // Set the initial volume value of the instrument
+//         setVolume(volumes[volumeIndex], instrument);
+//         if (playing) {
+//             const newVolume = Math.min(Math.max(parseInt(volumes[volumeIndex]), -50), 0); // Ramp the volume up or down according to the volume data, clamped to protect your speakers from rogue data
+//             setVolume(newVolume, instrument);
+//             console.log("[" + volumeIndex + "] " + instrument + " volume: " + instrument.volume.value);
+//             if (volumeIndex < volumes.length - 1) {
+//                 volumeIndex++
+//             } else {
+//                 volumeIndex = 0;
+//             }
+//         }
+//     }
+// }
+
+
+// const rampVolume = async (volumes, tick, instrument) => {
+//     if (volumes && tick && instrument) {
+//         // Set the initial volume value of the instrument
+//         setVolume(volumes[0], instrument)
+//         for (let i = 0; i < volumes.length; i++) {
+//             if (playing) {
+//                 const newVolume = Math.min(Math.max(parseInt(volumes[i]), -50), 0); // Ramp the volume up or down according to the volume data, clamped to protect your speakers from rogue data
+//                 setVolume(newVolume, instrument);
+//                 await sleep(tick);
+//             }
+//         };
+//     }
+// }
 
 // Changes tempo according to converted data source
 
@@ -197,7 +236,6 @@ let tempoIndex = 0;
 const rampTempo = (tempos) => {
     if (tempos && playing) {
         setTempo(tempos[tempoIndex]);
-        console.log(tempoIndex);
         if (tempoIndex < tempos.length - 1) {
             tempoIndex++
         } else {
@@ -205,14 +243,3 @@ const rampTempo = (tempos) => {
         }
     }
 }
-
-// const rampTempo = async (tempos, tick) => {
-//     if (tempos && tick) {
-//         for (let i = 0; i < tempos.length; i++) {
-//             if (playing) {
-//                 setTempo(tempos[i]);
-//                 await sleep(tick);
-//             }
-//         }
-//     }
-// }

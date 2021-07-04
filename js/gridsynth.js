@@ -18,12 +18,35 @@ let solarMelody = (createMelody(solarGeneration, totalGeneration));
 let batteryMelody = (createMelody(solarGeneration, totalGeneration));
 let bassLine = createBassLine();
 
-// Set up the tempo controls
+// Tempo controls
 
 Tone.Transport.bpm.value = bpmData[0]; // Initial tempo
 Tone.Transport.timeSignature = 3; // Time signature
 
+let bpmLoop = new Tone.Loop((time) => {
+    rampTempo(bpmData);
+}, "4n").start(0);
+
+// Volume controls
+
+let coalCurrentVolume = new CurrentVolume(coalData, coal);
+let windCurrentVolume = new CurrentVolume(windData, wind);
+let gasCurrentVolume = new CurrentVolume(gasData, gas);
+let hydroCurrentVolume = new CurrentVolume(hydroData, hydro);
+let solarCurrentVolume = new CurrentVolume(solarData, solar);
+let batteryCurrentVolume = new CurrentVolume(batteryData, battery);
+
+let volumeLoop = new Tone.Loop((time) => {
+    coalCurrentVolume.ramp();
+    windCurrentVolume.ramp();
+    gasCurrentVolume.ramp();
+    hydroCurrentVolume.ramp();
+    solarCurrentVolume.ramp();
+    batteryCurrentVolume.ramp();
+}, "4n").start(0);
+
 // Setting up the melodies as parts
+
 
 const coalSequence = new Tone.Sequence((time, note) => {
     coal.triggerAttackRelease(note, "4n", time);
@@ -61,9 +84,6 @@ const priceSequence = new Tone.Sequence((time, note) => {
     price.triggerAttackRelease(note, "1m", time);
 }, bassLine, "1m").start(0);
 
-let bpmLoop = new Tone.Loop((time) => {
-    rampTempo(bpmData);
-}, "4n").start(0);
 
 // Set up UI functions
 
@@ -72,17 +92,17 @@ var playing = false;
 function playNote() {
     Tone.start();
     Tone.Transport.start();
-    // rampTempo(bpmData, 1000);
-    rampVolume(windData, 1000, wind);
-    rampVolume(coalData, 1000, coal);
-    rampVolume(gasData, 1000, gas);
-    rampVolume(solarData, 1000, solar);
-    rampVolume(batteryData, 1000, battery);
-    rampVolume(hydroData, 1000, hydro);
 }
+
+// let currentGenerations = [coalCurrentGeneration, windCurrentGeneration, gasCurrentGeneration, hydroCurrentGeneration, solarCurrentGeneration, batteryCurrentGeneration];
+let currentInstrumentVolumes = [coalCurrentVolume, windCurrentVolume, gasCurrentVolume, hydroCurrentVolume, solarCurrentVolume, batteryCurrentVolume];
 
 function stopNote() {
     Tone.Transport.stop();
+    tempoIndex = 0;
+    currentInstrumentVolumes.forEach((currentInstrumentVolume, i) => {
+        currentInstrumentVolume.timeIndex = 0;
+    });
 }
 
 function buttonFocus() {
@@ -107,7 +127,7 @@ window.addEventListener("load", function () {
 
     document.getElementById("stop-button").addEventListener("click", function () {
         playing = false;
-        Tone.Transport.stop();
+        stopNote();
         buttonFocus();
     });
 });
