@@ -161,14 +161,14 @@ const createBassLine = () => {
         return bassLine;
     }
 
-    // TODO Decide the first line of the bassline
+    // TODO Decide the first note of the bassline
 }
 
 // Changes volume according to converted data source
 
 const setVolume = (volume, instrument) => {
     instrument.volume.value = volume;
-    console.log(instrument + " volume: " + instrument.volume.value);
+    // console.log(instrument + " volume: " + instrument.volume.value);
 }
 
 const rampVolume = async (volumes, tick, instrument) => {
@@ -192,13 +192,27 @@ const setTempo = (tempo) => {
     Tone.Transport.bpm.value = tempo;
 }
 
-const rampTempo = async (tempos, tick) => {
-    if (tempos && tick) {
-        for (let i = 0; i < tempos.length; i++) {
-            if (playing) {
-                setTempo(tempos[i]);
-                await sleep(tick);
-            }
+let tempoIndex = 0;
+
+const rampTempo = (tempos) => {
+    if (tempos && playing) {
+        setTempo(tempos[tempoIndex]);
+        console.log(tempoIndex);
+        if (tempoIndex < tempos.length - 1) {
+            tempoIndex++
+        } else {
+            tempoIndex = 0;
         }
     }
 }
+
+// const rampTempo = async (tempos, tick) => {
+//     if (tempos && tick) {
+//         for (let i = 0; i < tempos.length; i++) {
+//             if (playing) {
+//                 setTempo(tempos[i]);
+//                 await sleep(tick);
+//             }
+//         }
+//     }
+// }

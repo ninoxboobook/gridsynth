@@ -15,7 +15,6 @@ let coal = new Tone.Synth({
     oscillator: {
         detune: 0,
         type: "sine",
-        // partials: [2,1],
         phase: 0,
     },
     envelope: {
@@ -88,10 +87,6 @@ compressor.toDestination();
 const priceBuffer = new Tone.ToneAudioBuffer("/samples/singingbowl/singing_bowl.wav", () => {
     console.log("Price sampler loaded");
 });
-
-// const batteryBuffer = new Tone.ToneAudioBuffer("/samples/musicbox/9283__eliasheuninck__sol-3.wav", () => {
-//     console.log("Battery buffer loaded");
-// });
 
 const batteryBuffer = new Tone.ToneAudioBuffers({
     C1: "/samples/frenchhorn/MOHorn_sus_C1_v1_1.wav",

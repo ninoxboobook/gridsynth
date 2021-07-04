@@ -61,6 +61,10 @@ const priceSequence = new Tone.Sequence((time, note) => {
     price.triggerAttackRelease(note, "1m", time);
 }, bassLine, "1m").start(0);
 
+let bpmLoop = new Tone.Loop((time) => {
+    rampTempo(bpmData);
+}, "4n").start(0);
+
 // Set up UI functions
 
 var playing = false;
@@ -68,7 +72,7 @@ var playing = false;
 function playNote() {
     Tone.start();
     Tone.Transport.start();
-    rampTempo(bpmData, 1000);
+    // rampTempo(bpmData, 1000);
     rampVolume(windData, 1000, wind);
     rampVolume(coalData, 1000, coal);
     rampVolume(gasData, 1000, gas);

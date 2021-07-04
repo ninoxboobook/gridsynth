@@ -2,24 +2,18 @@ let backgroundDesktop;
 let backgroundTablet;
 let backgroundMobile;
 
-// let generationDataSources = [];
-
-// function createGenerationLoops(generationDataSources) {
-
-// }
-
 function CurrentGeneration(generationValues) {
     this.value;
     this.timeIndex = 0;
     this.display = function () {
         this.value = generationValues[this.timeIndex];
-        console.log(this.value);
+        // console.log(this.value);
         if (this.timeIndex < generationValues.length - 1) {
             this.timeIndex++;
-            console.log(this.timeIndex);
+            // console.log(this.timeIndex);
         } else {
             this.timeIndex = 0;
-            console.log(this.timeIndex);
+            // console.log(this.timeIndex);
         }
     }
 }
