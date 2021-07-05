@@ -19,12 +19,12 @@ The tempo (speed) of the song is determined by the scheduled demand in MW. So, a
 ### Instruments
 Each fuel/generation source is assigned its own unique instrument.
 
-Coal generation is represented by a sine-wave oscillator with a long attack, creating a note that sounds a little like a "whomp".
-Wind generation is represented by a sine-wave oscillator passed through a ping-pong delay, creating a note that has a cascading echo which introduces some interesting syncopation.
-Gas generation is represented by a frequency-modulated synth that is passed through a chorus, creating a note that is quite sharp and tinny.
-Hydro generation is represented by a sampler that plays a piano sample that is also passed through a chorus.
-Solar generation is represented by a sampler that plays a cello sample.
-Battery generation is represented by a sampler that plays a French horn sample.
+* Coal generation is represented by a sine-wave oscillator with a long attack, creating a note that sounds a little like a "whomp".
+* Wind generation is represented by a sine-wave oscillator passed through a ping-pong delay, creating a note that has a cascading echo which introduces some interesting syncopation.
+* Gas generation is represented by a frequency-modulated synth that is passed through a chorus, creating a note that is quite sharp and tinny.
+* Hydro generation is represented by a sampler that plays a piano sample that is also passed through a chorus.
+* Solar generation is represented by a sampler that plays a cello sample.
+* Battery generation is represented by a sampler that plays a French horn sample.
 ### Volume
 The volume of each instrument is determined by the proportion of total scheduled and semi-scheduled demand that a generation source represents at a given time.
 
