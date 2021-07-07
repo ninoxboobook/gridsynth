@@ -1,6 +1,6 @@
-let backgroundDesktop;
-let backgroundTablet;
-let backgroundMobile;
+// let backgroundDesktop;
+// let backgroundTablet;
+// let backgroundMobile;
 
 function CurrentGeneration(generationValues) {
     this.value;
@@ -42,6 +42,7 @@ let displayLoop = new Tone.Loop((time) => {
 
 function drawVisual(generationHistory, currentGeneration) {
     let generation = currentGeneration.value;
+    
     generationHistory.push(generation);
 
     beginShape();
@@ -60,14 +61,14 @@ function drawVisual(generationHistory, currentGeneration) {
     }
 }
 
-function preload() {
-    backgroundDesktop = loadImage('/assets/gridsynth-bg-desktop.png');
-    backgroundTablet = loadImage('/assets/gridsynth-bg-tablet.png');
-    backgroundMobile = loadImage('/assets/gridsynth-bg-mobile.png');
-}
+// function preload() {
+//     backgroundDesktop = loadImage('/assets/gridsynth-bg-desktop.png');
+//     backgroundTablet = loadImage('/assets/gridsynth-bg-tablet.png');
+//     backgroundMobile = loadImage('/assets/gridsynth-bg-mobile.png');
+// }
 
 function setup() {
-    var canvas = createCanvas(windowWidth, windowHeight);
+    var canvas = createCanvas(document.documentElement.clientWidth, document.documentElement.clientHeight);
     canvas.parent("p5-wrapper");
     angleMode(DEGREES);
     frameRate(30);
@@ -82,8 +83,8 @@ let batteryGenerationHistory = [];
 let totalGenerationHistory = [];
 
 function draw() {
-
-    setBackground();
+    clear();
+    // setBackground();
     stroke('rgba(255,255,255, 0.5)');
     fill('rgba(255,255,255, 0.1)');
     // noFill();
@@ -106,18 +107,18 @@ function draw() {
 }
 
 function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
+    resizeCanvas(document.documentElement.clientWidth, document.documentElement.clientHeight);
 }
 
-function setBackground() {
-    if (windowWidth < 480) {
-        background(backgroundMobile);
-    } else if (windowWidth >= 480 && windowWidth < 768) {
-        background(backgroundTablet);
-    } else {
-        background(backgroundDesktop);
-    }
-}
+// function setBackground() {
+//     if (windowWidth < 480) {
+//         background(backgroundMobile);
+//     } else if (windowWidth >= 480 && windowWidth < 768) {
+//         background(backgroundTablet);
+//     } else {
+//         background(backgroundDesktop);
+//     }
+// }
 
 
 // let coalVolumeHistory = [];
