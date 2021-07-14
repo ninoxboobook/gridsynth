@@ -1,19 +1,12 @@
-// let backgroundDesktop;
-// let backgroundTablet;
-// let backgroundMobile;
-
 function CurrentGeneration(generationValues) {
     this.value;
     this.timeIndex = 0;
     this.display = function () {
         this.value = generationValues[this.timeIndex];
-        // console.log(this.value);
         if (this.timeIndex < generationValues.length - 1) {
             this.timeIndex++;
-            // console.log(this.timeIndex);
         } else {
             this.timeIndex = 0;
-            // console.log(this.timeIndex);
         }
     }
 }
@@ -61,12 +54,6 @@ function drawVisual(generationHistory, currentGeneration) {
     }
 }
 
-// function preload() {
-//     backgroundDesktop = loadImage('/assets/gridsynth-bg-desktop.png');
-//     backgroundTablet = loadImage('/assets/gridsynth-bg-tablet.png');
-//     backgroundMobile = loadImage('/assets/gridsynth-bg-mobile.png');
-// }
-
 function setup() {
     var canvas = createCanvas(document.documentElement.clientWidth, document.documentElement.clientHeight);
     canvas.parent("p5-wrapper");
@@ -84,12 +71,9 @@ let totalGenerationHistory = [];
 
 function draw() {
     clear();
-    // setBackground();
     stroke('rgba(255,255,255, 0.5)');
     fill('rgba(255,255,255, 0.1)');
-    // noFill();
     strokeJoin(ROUND);
-    // strokeWeight(2);
     translate(width / 2, height / 2);
 
     drawVisual(coalGenerationHistory, coalCurrentGeneration);
@@ -109,50 +93,3 @@ function draw() {
 function windowResized() {
     resizeCanvas(document.documentElement.clientWidth, document.documentElement.clientHeight);
 }
-
-// function setBackground() {
-//     if (windowWidth < 480) {
-//         background(backgroundMobile);
-//     } else if (windowWidth >= 480 && windowWidth < 768) {
-//         background(backgroundTablet);
-//     } else {
-//         background(backgroundDesktop);
-//     }
-// }
-
-
-// let coalVolumeHistory = [];
-// let windVolumeHistory = [];
-// let gasVolumeHistory = [];
-// let hydroVolumeHistory = [];
-// let solarVolumeHistory = [];
-// let batteryVolumeHistory = [];
-
-// function drawVisual(instrument, volumeHistory) {
-//     // let volume = instrument.getLevelAtTime(Tone.now());
-//     let volume = instrument.volume.value;
-//     volumeHistory.push(volume);
-//     // let generation;
-//     // generationHistory.push(generation);
-//     beginShape();
-//     for (var i = 0; i < 360; i++) {
-//         let r = map(volumeHistory[i], -30, -9, 200, 350);
-//         let x = r * cos(i);
-//         let y = r * sin(i);
-
-//         vertex(x, y);
-//     }
-
-//     endShape();
-
-//     if (volumeHistory.length > 360) {
-//         volumeHistory.splice(0, 1);
-//     }
-// }
-
-// drawVisual(coal, coalVolumeHistory);
-// drawVisual(wind, windVolumeHistory);
-// drawVisual(gas, gasVolumeHistory);
-// // drawVisual(hydro, hydroVolumeHistory);
-// drawVisual(solar, solarVolumeHistory);
-// drawVisual(battery, batteryVolumeHistory);
