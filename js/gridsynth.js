@@ -154,4 +154,12 @@ window.addEventListener("load", function () {
         stopNote();
         buttonFocus();
     });
+
+    const contrastButton = document.getElementById("contrastButton");
+
+    contrastButton.addEventListener("click", function () {  
+    let checked = contrastButton.getAttribute("aria-checked") === "true";
+    contrastButton.setAttribute("aria-checked", String(!checked));
+        document.body.classList.toggle("high-contrast");
+    });
 });

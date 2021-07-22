@@ -6,6 +6,7 @@ body {
     margin: 0;
 }
 
+
 @media (min-width: 320px) {
     body {
         background: url('/assets/gridsynth-bg-mobile.png');
@@ -30,6 +31,11 @@ body {
     }
 }
 
+.high-contrast {
+    background-image: unset;
+    background-color: #1e0342;
+}
+
 #p5-wrapper {
     position: relative;
     top: 0;
@@ -51,7 +57,7 @@ body {
 
 .skip-link {
     background: #fff;
-    color: #8446DC;
+    color: #6628e7;
     font-weight: 700;
     left: 0;
     padding: 1em;
@@ -97,7 +103,7 @@ nav ul li {
     font-size: 1.5em;
     font-weight: 400;
     display: inline-block;
-    padding: 0 .5em;
+    padding: 0 .75em;
 }
 
 nav a {
@@ -129,18 +135,69 @@ button:hover {
     transition: all ease-in-out .2s;
 }
 
+.menu-button {
+    border: none;
+    font-size: 1em;
+    padding: .25em .25em;
+    margin: 0;
+    min-width: unset;
+    text-decoration: underline;
+}
+
+.toggle-button {
+    padding: 0;
+    margin: 0 0 0 .5em;
+    font-size: 1em;
+    min-width: 44px;
+    min-height: 44px;
+}
+
+[role="switch"][aria-checked="false"] :first-child, 
+[role="switch"][aria-checked="true"] :last-child {
+  background: #fff;
+  color: #6628e7;
+  transition: all ease-in-out .2s;
+}
+
+.high-contrast [role="switch"][aria-checked="false"] :first-child, 
+.high-contrast [role="switch"][aria-checked="true"] :last-child, .high-contrast .emphasis, .high-contrast .emphasis:hover, .high-contrast .emphasis::before {
+  background: #fff;
+  color: #1e0342;
+  -webkit-box-shadow: unset;
+    box-shadow: unset;
+    transition: all ease-in-out .2s;
+
+}
+
+[role="switch"][aria-checked="false"] :first-child {
+    padding-right: .7em;
+    transition: all ease-in-out .2s;
+}
+
+[role="switch"][aria-checked="true"] :last-child {
+    padding-left: .7em;
+    transition: all ease-in-out .2s;
+}
+
+.toggle-button span {
+    display: inline-block;
+    padding: 0.25em .5em 0.3em .5em;
+    border-radius: 30px;
+    transition: all ease-in-out .2s;
+}
+
 button.emphasis {
     position: relative;
     background-color: #fff;
     border-color: #fff;
-    color: #8446DC;
+    color: #6628e7;
     transition: all ease-in-out .2s;
 }
 
 button.emphasis:hover {
     background-color: #fff;
     border-color: #fff;
-    color: #8446DC;
+    color: #6628e7;
     transition: all ease-in-out .2s;
 }
 
@@ -151,7 +208,7 @@ button.emphasis::before {
     left: 0;
     right: 0;
     content: '';
-    border-color: #8446DC;
+    border-color: #6628e7;
     border-radius: 80px;
     -webkit-box-shadow: 0px 3px 9px 3px rgba(105, 50, 231, 0.6);
     box-shadow: 0px 3px 9px 3px rgba(105, 50, 231, 0.6);
@@ -177,4 +234,21 @@ button.emphasis:hover::before {
 .subtitle {
     font-size: 3em;
     text-transform: lowercase;
+}
+
+#about {
+    background: #fff;
+    color:#1e0342;
+    padding: 3em 4em;
+    border-radius: 30px 30px 0 0;
+}
+
+#about p, #about ul {
+    font-weight: 300;
+    line-height: 1.5;
+    font-size: 1.15em;
+}
+
+#about ul ul {
+    font-size: 1em;
 }
