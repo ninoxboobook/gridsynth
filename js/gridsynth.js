@@ -143,6 +143,8 @@ function buttonFocus() {
 
 window.addEventListener("load", function () {
     document.getElementById("stop-button").disabled = true;
+    console.log(testParsedData);
+    // console.log(spotPrice);
     document.getElementById("play-button").addEventListener("click", function () {
         playing = true;
         playNote();
@@ -162,4 +164,8 @@ window.addEventListener("load", function () {
     contrastButton.setAttribute("aria-checked", String(!checked));
         document.body.classList.toggle("high-contrast");
     });
+
+    document.getElementById("about-button").addEventListener("click", function () {
+        document.getElementById("about").classList.toggle("hidden");
+    })
 });

@@ -240,14 +240,36 @@ button.emphasis:hover::before {
     background: #fff;
     color:#1e0342;
     padding: 3em 4em;
-    border-radius: 30px 30px 0 0;
+    /* border-radius: 30px 0 0 30px; */
+    position:fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 40%;
+    overflow: auto;
+    z-index: 99999;
+    transition: right ease-in-out 1s;
+}
+
+.high-contrast #about {
+    background: #311a5d;
+    color: #fff;
+}
+
+#about.hidden {
+    right: -100vw;
+    transition: right ease-in-out 1s;
 }
 
 #about p, #about ul {
     font-weight: 300;
-    line-height: 1.5;
+    line-height: 1.6;
     font-size: 1.15em;
 }
+
+/* .high-contrast #about p, .high-contrast #about ul {
+    font-weight: 400;
+} */
 
 #about ul ul {
     font-size: 1em;

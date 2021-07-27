@@ -19,7 +19,7 @@
             <h1 class="display">Gridsynth</h1>
             <nav role="navigation" aria-label="Main menu">
                 <ul>
-                    <li><button class="menu-button">About</button></li>
+                    <li><button id="about-button" class="menu-button">About</button></li>
                     <li><a href="https://github.com/ninoxboobook/gridsynth#readme">GitHub</a></li>
                     <li><span id="dark-mode">Dark mode</span> <button id="contrastButton" class="toggle-button" role="switch" aria-checked="false" aria-labelledby="dark-mode"><span>off</span><span>on</span></button></li>
                 </ul>
@@ -33,7 +33,7 @@
         </main>
     </div>
     <aside>
-        <div id="about">
+        <div id="about" class="hidden">
         <h2>About gridsynth</h2>
         <p>Gridsynth is an art project by Rihana Ries.</p>
         <p>Inspired by the generative music of Brian Eno, <b>gridsynth</b> takes energy grid data from the <a href="https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem">National Energy Market</a> and turns it into a replayable song that also tells a story about energy demand and supply. That is, by listening to a gridsynth-generated song, we can also understand a little bit about what was going on with the electricity grid at a particular point in time.</p>
