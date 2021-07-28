@@ -4,7 +4,7 @@
 
 Gridsynth is a proof of concept/art project inspired by the generative music of Brian Eno.
 
-Gridsynth takes energy grid data from the [National Energy Market](https://aemo.com.au/en/energy-systems/electricity/national-electricity-market-nem/data-nem) and turns it into a replayable song that also tells a story about energy demand and supply. That is, by listening to a gridsynth-generated song, we can also understand a little bit about what was going on with the electricity grid at a particular point in time.
+Gridsynth takes energy grid data from the [National Electricity Market](https://aemo.com.au/en/energy-systems/electricity/national-electricity-market-nem/data-nem) and turns it into a replayable song that also tells a story about energy demand and supply. That is, by listening to a gridsynth-generated song, we can also understand a little bit about what was going on with the electricity grid at a particular point in time.
 
 [Listen to gridsynth](http://rihanari.es/gridsynth/) (best with headphones)
 
