@@ -86,6 +86,9 @@ The code in this repository is licensed under the GPL. The data is not: data fro
 
 Data sourced from [Open Electricity](https://openelectricity.org.au) (The Superpower Institute), licensed under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/).
 
+### Deploying to GitHub Pages
+The workflow in `.github/workflows/deploy-pages.yml` publishes the site to GitHub Pages whenever `main` changes, and again after each daily data fetch. GitHub Pages has to be turned on once: go to Settings, then Pages, and set Source to "GitHub Actions". Until then the workflow finishes without deploying.
+
 ### Running gridsynth locally
 Gridsynth is a static site, but it needs to be served by a web server to load its samples and data. Run `npm start` and open http://localhost:8080.
 

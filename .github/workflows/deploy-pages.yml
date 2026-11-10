@@ -1,0 +1,64 @@
+name: Deploy to GitHub Pages
+
+# Publishes the site to GitHub Pages whenever main changes, and again after the
+# daily data fetch (commits made by that workflow do not start this one on
+# their own).
+#
+# GitHub Pages has to be turned on once for the repository: go to Settings,
+# then Pages, and set Source to "GitHub Actions". Until then this workflow
+# finishes without deploying.
+
+on:
+  push:
+    branches: [main]
+  workflow_run:
+    workflows: [Fetch grid data]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Check that GitHub Pages is turned on
+        id: pages
+        continue-on-error: true
+        uses: actions/configure-pages@v5
+
+      - name: Explain how to turn on GitHub Pages
+        if: steps.pages.outcome == 'failure'
+        run: echo "::warning::The site was not deployed because GitHub Pages is not turned on. Go to Settings, then Pages, set Source to GitHub Actions, and run this workflow again."
+
+      # Only the files the site needs are published
+      - name: Gather the site files
+        if: steps.pages.outcome == 'success'
+        run: |
+          mkdir _site
+          cp -r index.html css js assets samples data _site/
+
+      - name: Upload the site
+        if: steps.pages.outcome == 'success'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy the site
+        if: steps.pages.outcome == 'success'
+        id: deployment
+        uses: actions/deploy-pages@v4
