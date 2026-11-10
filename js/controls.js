@@ -23,7 +23,11 @@ const convertData = (numerators, denominators, range, lowerBound) => {
     if (numerators && denominators && range && lowerBound) {
         let output = [];
         denominators.forEach((denominator, i) => {
-            output.push(lowerBound + ((numerators[i] / denominators[i]) * range));
+            if (denominator > 0) {
+                output.push(lowerBound + ((numerators[i] / denominator) * range));
+            } else {
+                output.push(lowerBound);
+            }
         })
         return output;
     }
@@ -63,6 +67,8 @@ const createMelody = (generationValues, noise) => {
                     pitch = scale[3];
                 } else if (pitch == '8' || pitch == '9') {
                     pitch = scale[4];
+                } else {
+                    pitch = scale[0]; // The logarithm was too short to have a digit in this position
                 }
             } else {
                 pitch = 're';
@@ -121,41 +127,30 @@ const averageArray = (array, segmentSize) => {
     }
 }
 
-const createBassLine = () => {
-    let averageSpotPrices = averageArray(spotPrice, 12);
-    let i = 0;
+const createBassLine = (spotPrices) => {
+    let averageSpotPrices = averageArray(spotPrices, stepsPerHour);
+    let notesPerAverage = stepsPerHour / stepsPerBar; // Keeps each hour of price in step with the same hour of generation
     let bassLineIndex = 0;
     let bassLine = [];
     if (averageSpotPrices) {
-        for (i = 0; i < averageSpotPrices.length; i++) {
-            if (i == 0) {
-                bassLine.push(bassLineScale[bassLineIndex]);
-                bassLine.push(bassLineScale[bassLineIndex]);
-                bassLine.push(bassLineScale[bassLineIndex]);
-            } else {
+        for (let i = 0; i < averageSpotPrices.length; i++) {
+            if (i > 0) {
                 if (averageSpotPrices[i] > averageSpotPrices[i - 1]) {
                     if (bassLineIndex < 5) {
                         bassLineIndex++;
                     } else {
                         bassLineIndex = 0;
                     }
-                    bassLine.push(bassLineScale[bassLineIndex]);
-                    bassLine.push(bassLineScale[bassLineIndex]);
-                    bassLine.push(bassLineScale[bassLineIndex]);
                 } else if (averageSpotPrices[i] < averageSpotPrices[i - 1]) {
                     if (bassLineIndex > 0) {
                         bassLineIndex--;
                     } else {
                         bassLineIndex = 0;
                     }
-                    bassLine.push(bassLineScale[bassLineIndex]);
-                    bassLine.push(bassLineScale[bassLineIndex]);
-                    bassLine.push(bassLineScale[bassLineIndex]);
-                } else {
-                    bassLine.push(bassLineScale[bassLineIndex]);
-                    bassLine.push(bassLineScale[bassLineIndex]);
-                    bassLine.push(bassLineScale[bassLineIndex]);
                 }
+            }
+            for (let j = 0; j < notesPerAverage; j++) {
+                bassLine.push(bassLineScale[bassLineIndex]);
             }
         }
         return bassLine;

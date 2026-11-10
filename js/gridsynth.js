@@ -1,110 +1,79 @@
-// Get the data points for conversion
+// Each generation source, the instrument that plays it, and when its melody starts.
+// The melodies are offset from each other by a 16th note.
 
-let bpmData = convertData(scheduledDemand, createMaxValueArray(scheduledDemand), 60, 30)
-let coalData = convertData(coalGeneration, totalGeneration, 21, -30);
-let windData = convertData(windGeneration, totalGeneration, 21, -30);
-let hydroData = convertData(hydroGeneration, totalGeneration, 21, -30);
-let gasData = convertData(gasGeneration, totalGeneration, 21, -30);
-let solarData = convertData(solarGeneration, totalGeneration, 21, -30);
-let batteryData = convertData(batteryGeneration, totalGeneration, 21, -30);
+const generationSources = [
+    { name: 'coal', instrument: coal, start: 0 },
+    { name: 'wind', instrument: wind, start: "16n" },
+    { name: 'hydro', instrument: hydro, start: "8n" },
+    { name: 'gas', instrument: gas, start: "8n + 16n" },
+    { name: 'solar', instrument: solar, start: "4n" },
+    { name: 'battery', instrument: battery, start: "4n + 16n" },
+];
 
+// The song currently loaded: its tempos, volumes and sequences
 
-// Create the melodies
+let bpmData = [];
+let currentInstrumentVolumes = [];
+let sequences = [];
 
-let coalMelody = (createMelody(coalGeneration, totalGeneration));
-let windMelody = (createMelody(windGeneration, totalGeneration));
-let hydroMelody = (createMelody(hydroGeneration, totalGeneration));
-let gasMelody = (createMelody(gasGeneration, totalGeneration));
-let solarMelody = (createMelody(solarGeneration, totalGeneration));
-let batteryMelody = (createMelody(solarGeneration, totalGeneration));
-let bassLine = createBassLine();
+Tone.Transport.timeSignature = stepsPerBar; // One note of the bass line lasts one bar
 
 // Tempo controls
-
-Tone.Transport.bpm.value = bpmData[0]; // Initial tempo
-Tone.Transport.timeSignature = 3; // Time signature
 
 let bpmLoop = new Tone.Loop((time) => {
     rampTempo(bpmData);
 }, "4n").start(0);
 
-
 // Volume controls
 
-let instruments = [coal, wind, gas, hydro, solar, battery];
-let volumeData = [coalData, windData, gasData, hydroData, solarData, batteryData];
-
-function setInitialVolume() {
-    instruments.forEach((instrument, i) => {
-       for (let j = 0; j < 1; j++) {
-            if (j < 1) {
-                setVolume(volumeData[i][j], instrument);
-            }
-        }; 
-    });
-}
-
-setInitialVolume();
-
-let coalCurrentVolume = new CurrentVolume(coalData, coal);
-let windCurrentVolume = new CurrentVolume(windData, wind);
-let gasCurrentVolume = new CurrentVolume(gasData, gas);
-let hydroCurrentVolume = new CurrentVolume(hydroData, hydro);
-let solarCurrentVolume = new CurrentVolume(solarData, solar);
-let batteryCurrentVolume = new CurrentVolume(batteryData, battery);
-
 let volumeLoop = new Tone.Loop((time) => {
-    coalCurrentVolume.ramp();
-    windCurrentVolume.ramp();
-    gasCurrentVolume.ramp();
-    hydroCurrentVolume.ramp();
-    solarCurrentVolume.ramp();
-    batteryCurrentVolume.ramp();
+    currentInstrumentVolumes.forEach((currentInstrumentVolume) => {
+        currentInstrumentVolume.ramp();
+    });
 }, "4n").start(0);
 
+// Turns a dataset into a song
 
-// Set up the melodies as sequences
+function createSong(dataset) {
+    let totalGeneration = dataset.totalGeneration;
 
-const coalSequence = new Tone.Sequence((time, note) => {
-    coal.triggerAttackRelease(note, "4n", time);
-}, coalMelody, "4n").start(0);
+    // Clear out the previous song
 
-const windSequence = new Tone.Sequence((time, note) => {
-    wind.triggerAttackRelease(note, "4n", time);
-}, windMelody, "4n").start("16n");
+    sequences.forEach((sequence) => {
+        sequence.dispose();
+    });
+    sequences = [];
+    currentInstrumentVolumes = [];
 
-const hydroSequence = new Tone.Sequence(async (time, note) => {
-    if (note == 0) {
-        await sleep(Tone.Time("4n"));
-    } else {
-        hydro.triggerAttackRelease(note, "4n", time);
-    }
-}, hydroMelody, "4n").start("8n");
+    // Get the data points for conversion
 
-const gasSequence = new Tone.Sequence((time, note) => {
-    gas.triggerAttackRelease(note, "4n", time);
-}, gasMelody, "4n").start("8n + 16n");
+    bpmData = convertData(dataset.demand, createMaxValueArray(dataset.demand), 60, 30);
+    tempoIndex = 0;
+    Tone.Transport.bpm.value = bpmData[0]; // Initial tempo
 
-const solarSequence = new Tone.Sequence(async (time, note) => {
-    if (note == 0) {
-        await sleep(Tone.Time("4n"));
-    } else {
-        solar.triggerAttackRelease(note, "4n", time);
-    }
-}, solarMelody, "4n").start("4n");
+    generationSources.forEach((source) => {
+        let generation = dataset.generation[source.name];
+        let volumeData = convertData(generation, totalGeneration, 21, -30);
+        let melody = createMelody(generation, totalGeneration);
 
-const batterySequence = new Tone.Sequence(async (time, note) => {
-    if (note == 0) {
-        await sleep(Tone.Time("4n"));
-    } else {
-        battery.triggerAttackRelease(note, "4n", time);
-    }
-}, batteryMelody, "4n").start("4n + 16n");
+        setVolume(volumeData[0], source.instrument); // Initial volume
+        currentInstrumentVolumes.push(new CurrentVolume(volumeData, source.instrument));
 
-const priceSequence = new Tone.Sequence((time, note) => {
-    price.triggerAttackRelease(note, "1m", time);
-}, bassLine, "1m").start(0);
+        // Set up the melody as a sequence
 
+        sequences.push(new Tone.Sequence((time, note) => {
+            if (note != 0) {
+                source.instrument.triggerAttackRelease(note, "4n", time);
+            }
+        }, melody, "4n").start(source.start));
+    });
+
+    sequences.push(new Tone.Sequence((time, note) => {
+        price.triggerAttackRelease(note, "1m", time);
+    }, createBassLine(dataset.price), "1m").start(0));
+
+    setVisualiserData(generationSources.map((source) => dataset.generation[source.name]), totalGeneration);
+}
 
 // Set up UI functions
 
@@ -114,9 +83,6 @@ function playNote() {
     Tone.start();
     Tone.Transport.start();
 }
-
-let currentGenerations = [coalCurrentGeneration, windCurrentGeneration, gasCurrentGeneration, hydroCurrentGeneration, solarCurrentGeneration, batteryCurrentGeneration];
-let currentInstrumentVolumes = [coalCurrentVolume, windCurrentVolume, gasCurrentVolume, hydroCurrentVolume, solarCurrentVolume, batteryCurrentVolume];
 
 function stopNote() {
     Tone.Transport.stop();
@@ -130,36 +96,113 @@ function stopNote() {
 }
 
 function buttonFocus() {
-    document.getElementById("stop-button").classList.toggle("emphasis");
-    document.getElementById("play-button").classList.toggle("emphasis");
+    document.getElementById("stop-button").classList.toggle("emphasis", playing);
+    document.getElementById("play-button").classList.toggle("emphasis", !playing);
+    document.getElementById("play-button").disabled = playing;
+    document.getElementById("stop-button").disabled = !playing;
+}
+
+function stop() {
     if (playing) {
-        document.getElementById("play-button").disabled = true;
-        document.getElementById("stop-button").disabled = false;
-    } else {
-        document.getElementById("stop-button").disabled = true;
-        document.getElementById("play-button").disabled = false;
+        playing = false;
+        stopNote();
+        buttonFocus();
+    }
+}
+
+// Shows where the data for the current song came from
+
+function showDataSource(source) {
+    const dataSource = document.getElementById("data-source");
+    dataSource.textContent = "";
+    if (!source) {
+        return;
+    }
+
+    const createLink = (text, url) => {
+        const link = document.createElement("a");
+        link.textContent = text;
+        link.href = url;
+        return link;
+    };
+
+    dataSource.append("Data sourced from ", source.url ? createLink(source.name, source.url) : source.name);
+    if (source.publisher) {
+        dataSource.append(" (" + source.publisher + ")");
+    }
+    if (source.licence) {
+        dataSource.append(", licensed under ", source.licenceUrl ? createLink(source.licence, source.licenceUrl) : source.licence);
+    }
+    dataSource.append(".");
+}
+
+// Loads a dataset and gets its song ready to play
+
+async function loadSong(file) {
+    const songTitle = document.getElementById("song-title");
+    const playButton = document.getElementById("play-button");
+
+    stop();
+    playButton.disabled = true;
+
+    try {
+        const dataset = await getDataset(file);
+        createSong(dataset);
+        songTitle.textContent = dataset.title;
+        showDataSource(dataset.source);
+        playButton.disabled = false;
+    } catch (error) {
+        console.error(error);
+        songTitle.textContent = "Sorry, the grid data could not be loaded.";
+        showDataSource(null);
+    }
+}
+
+// Fills the song picker with the available datasets and loads the default one
+
+async function setUpSongs() {
+    const songSelect = document.getElementById("song-select");
+
+    try {
+        const datasetList = await getDatasetList();
+
+        datasetList.datasets.forEach((dataset) => {
+            const option = document.createElement("option");
+            option.value = dataset.file;
+            option.textContent = dataset.title;
+            option.selected = dataset.id == datasetList.default;
+            songSelect.appendChild(option);
+        });
+
+        // The picker is only needed when there is more than one song to choose from
+        document.getElementById("song-picker").hidden = datasetList.datasets.length < 2;
+
+        songSelect.addEventListener("change", function () {
+            loadSong(songSelect.value);
+        });
+
+        await loadSong(songSelect.value);
+    } catch (error) {
+        console.error(error);
+        document.getElementById("song-title").textContent = "Sorry, the grid data could not be loaded.";
     }
 }
 
 window.addEventListener("load", function () {
     document.getElementById("stop-button").disabled = true;
-    console.log(testParsedData);
-    // console.log(spotPrice);
+    document.getElementById("play-button").disabled = true;
+
     document.getElementById("play-button").addEventListener("click", function () {
         playing = true;
         playNote();
         buttonFocus();
     });
 
-    document.getElementById("stop-button").addEventListener("click", function () {
-        playing = false;
-        stopNote();
-        buttonFocus();
-    });
+    document.getElementById("stop-button").addEventListener("click", stop);
 
     const contrastButton = document.getElementById("contrastButton");
 
-    contrastButton.addEventListener("click", function () {  
+    contrastButton.addEventListener("click", function () {
     let checked = contrastButton.getAttribute("aria-checked") === "true";
     contrastButton.setAttribute("aria-checked", String(!checked));
         document.body.classList.toggle("high-contrast");
@@ -168,4 +211,6 @@ window.addEventListener("load", function () {
     document.getElementById("about-button").addEventListener("click", function () {
         document.getElementById("about").classList.toggle("hidden");
     })
+
+    setUpSongs();
 });

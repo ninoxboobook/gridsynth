@@ -4,7 +4,7 @@ let price = new Tone.Sampler({
     urls: {
         C2: "singing_bowl.wav"
     },
-    baseUrl: "/samples/singingbowl/",
+    baseUrl: "samples/singingbowl/",
     attack: 1,
     release: 1,
     curve: "linear",
@@ -38,7 +38,7 @@ let hydro = new Tone.Sampler({
         G3: "piano_G3_pp_RR2.wav",
         G4: "piano_G4_pp_RR2.wav",
     },
-    baseUrl: "/samples/piano/",
+    baseUrl: "samples/piano/",
 });
 hydro.name = "Hydro";
 
@@ -47,7 +47,7 @@ let solar = new Tone.Sampler({
         C3: "cello_C3_short.mp3",
         D4: "cello_D4_short.mp3",
     },
-    baseUrl: "/samples/cello/",
+    baseUrl: "samples/cello/",
     curve: "linear",
     attack: 0.1,
 });
@@ -65,7 +65,7 @@ let battery = new Tone.Sampler({
         C3: "MOHorn_sus_C3_v1_1.wav",
         D4: "MOHorn_sus_D4_v1_1.wav",
     },
-    baseUrl: "/samples/frenchhorn/",
+    baseUrl: "samples/frenchhorn/",
     curve: "linear",
     attack: 0.1,
 });
@@ -89,29 +89,29 @@ compressor.toDestination();
 
 // Buffers
 
-const priceBuffer = new Tone.ToneAudioBuffer("/samples/singingbowl/singing_bowl.wav", () => {
+const priceBuffer = new Tone.ToneAudioBuffer("samples/singingbowl/singing_bowl.wav", () => {
     console.log("Price sampler loaded");
 });
 
 const batteryBuffer = new Tone.ToneAudioBuffers({
-    C1: "/samples/frenchhorn/MOHorn_sus_C1_v1_1.wav",
-    A2: "/samples/frenchhorn/MOHorn_sus_A2_v2_1.wav",
-    C3: "/samples/frenchhorn/MOHorn_sus_C3_v1_1.wav",
-    D4: "/samples/frenchhorn/MOHorn_sus_D4_v1_1.wav",
+    C1: "samples/frenchhorn/MOHorn_sus_C1_v1_1.wav",
+    A2: "samples/frenchhorn/MOHorn_sus_A2_v2_1.wav",
+    C3: "samples/frenchhorn/MOHorn_sus_C3_v1_1.wav",
+    D4: "samples/frenchhorn/MOHorn_sus_D4_v1_1.wav",
 }, () => {
     console.log("Battery buffer loaded");
 });
 
 const hydroBuffer = new Tone.ToneAudioBuffers({
-    G3: "/samples/piano/piano_G3_pp_RR2.wav",
-    G4: "/samples/piano/piano_G4_pp_RR2.wav",
+    G3: "samples/piano/piano_G3_pp_RR2.wav",
+    G4: "samples/piano/piano_G4_pp_RR2.wav",
 }, () => {
     console.log("Hydro buffer loaded");
 });
 
 const solarBuffer = new Tone.ToneAudioBuffers({
-    C3: "/samples/cello/cello_C3_short.mp3",
-    D4: "/samples/cello/cello_D4_short.mp3",
+    C3: "samples/cello/cello_C3_short.mp3",
+    D4: "samples/cello/cello_D4_short.mp3",
 }, () => {
     console.log("Solar buffer loaded");
 });

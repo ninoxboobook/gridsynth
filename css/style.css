@@ -9,7 +9,7 @@ body {
 
 @media (min-width: 320px) {
     body {
-        background: url('/assets/gridsynth-bg-mobile.png');
+        background: url('../assets/gridsynth-bg-mobile.png');
         background-size: cover;
         background-repeat: no-repeat;
     }
@@ -17,7 +17,7 @@ body {
 
 @media (min-width: 540px) {
     body {
-        background: url('/assets/gridsynth-bg-tablet.png');
+        background: url('../assets/gridsynth-bg-tablet.png');
         background-size: cover;
         background-repeat: no-repeat;
     }
@@ -25,7 +25,7 @@ body {
 
 @media (min-width: 1024px) {
     body {
-        background: url('/assets/gridsynth-bg-desktop.png');
+        background: url('../assets/gridsynth-bg-desktop.png');
         background-size: cover;
         background-repeat: no-repeat;
     }
@@ -115,6 +115,43 @@ main {
     margin: auto;
     overflow: auto;
     text-align: center;
+}
+
+#song-picker {
+    margin-bottom: 2em;
+}
+
+#song-picker label {
+    display: block;
+    margin-bottom: .5em;
+}
+
+#song-select {
+    border: 2px #fff solid;
+    background-color: transparent;
+    color: #fff;
+    border-radius: 30px;
+    font-family: inherit;
+    font-size: 1em;
+    max-width: 100%;
+    padding: 8px 16px;
+}
+
+#song-select option {
+    background-color: #fff;
+    color: #1e0342;
+}
+
+#song-picker[hidden] + #play-button {
+    margin-top: 1em;
+}
+
+#data-source {
+    font-size: .85em;
+}
+
+main a {
+    color: #fff;
 }
 
 button {

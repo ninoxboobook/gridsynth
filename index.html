@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-AU">
 
 <head>
-    <title>gridsynth - Sonifying the electricity grid</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <script src="/js/main.js"></script>
-    <script src="/js/data.js"></script>
-    <script src="/js/controls.js"></script>
-    <script src="/js/instruments.js"></script>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gridsynth - Sonifying the electricity grid</title>
+    <meta name="description" content="Gridsynth turns a day of Australian electricity grid data into generative music. Hear energy demand, spot price and the fuel mix of the grid as a song.">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/main.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/controls.js"></script>
+    <script src="js/instruments.js"></script>
 </head>
 
 <body>
@@ -27,9 +29,14 @@
         </header>
         <main role="main">
             <h2 id="now-playing">Now playing</h2>
-            <p style="margin-bottom:2em">Victorian Energy Grid - June 11, 2021</p>
+            <p id="song-title" aria-live="polite">Loading grid data</p>
+            <div id="song-picker" hidden>
+                <label for="song-select">Choose another day</label>
+                <select id="song-select"></select>
+            </div>
             <button id="play-button" class="emphasis">Play</button>
             <button id="stop-button">Stop</button>
+            <p id="data-source"></p>
         </main>
     </div>
     <aside>
@@ -50,12 +57,13 @@
                 <li>Battery generation is represented by a sampler that plays a French horn sample.</li>
             </ul></li>
         </ul>
+            <p>Grid data for recent days is sourced from <a href="https://openelectricity.org.au">Open Electricity</a> (The Superpower Institute), licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>. The data for June 11, 2021 comes from the <a href="https://aemo.com.au/en/energy-systems/electricity/national-electricity-market-nem/data-nem">Australian Energy Market Operator</a>.</p>
             <p>Gridsynth uses Tone.js and p5.js.</p>
             <p>You can find more information on how gridsynth was created on <a href="https://github.com/ninoxboobook/gridsynth#readme">GitHub</a>.</p>
         </div>
     </aside>
-    <script src="/js/visualiser.js"></script>
-    <script src="/js/gridsynth.js"></script>
+    <script src="js/visualiser.js"></script>
+    <script src="js/gridsynth.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,40 @@
+{
+  "default": "VIC1-2021-06-11",
+  "datasets": [
+    {
+      "id": "VIC1-2021-06-11",
+      "title": "Victorian Energy Grid - June 11, 2021",
+      "region": "VIC1",
+      "date": "2021-06-11",
+      "file": "VIC1-2021-06-11.json"
+    },
+    {
+      "id": "SA1-2026-01-15",
+      "title": "South Australian Energy Grid - January 15, 2026",
+      "region": "SA1",
+      "date": "2026-01-15",
+      "file": "SA1-2026-01-15.json"
+    },
+    {
+      "id": "VIC1-2026-06-11",
+      "title": "Victorian Energy Grid - June 11, 2026",
+      "region": "VIC1",
+      "date": "2026-06-11",
+      "file": "VIC1-2026-06-11.json"
+    },
+    {
+      "id": "NSW1-2026-10-15",
+      "title": "New South Wales Energy Grid - October 15, 2026",
+      "region": "NSW1",
+      "date": "2026-10-15",
+      "file": "NSW1-2026-10-15.json"
+    },
+    {
+      "id": "WEM-2026-10-15",
+      "title": "Western Australian Energy Grid - October 15, 2026",
+      "region": "WEM",
+      "date": "2026-10-15",
+      "file": "WEM-2026-10-15.json"
+    }
+  ]
+}

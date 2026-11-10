@@ -1,9 +1,12 @@
 {
   "name": "gridsynth",
   "version": "1.0.0",
-  "description": "Data sonification of one day of the Victorian energy grid.",
+  "description": "Data sonification of a day on the Australian electricity grid.",
   "main": "index.html",
   "scripts": {
+    "start": "npx http-server . -c-1 -a localhost -p 8080",
+    "fetch-data": "node scripts/fetch-data.js",
+    "build:vendor": "npx browserify js/includes.js -o js/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,7 +18,10 @@
     "sonification"
   ],
   "author": "Rihana Ries",
-  "license": "ISC",
+  "license": "GPL-3.0-only",
+  "engines": {
+    "node": ">=18"
+  },
   "bugs": {
     "url": "https://github.com/ninoxboobook/gridsynth/issues"
   },
