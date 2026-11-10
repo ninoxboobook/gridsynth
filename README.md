@@ -48,31 +48,38 @@ The spot price trend is worked out for each hour, and each hour is played as fou
 ### Visualiser
 Finally, the gridsynth visualiser is painting a continuously updating graph of fuel mix (the inner circles) and total scheduled and semi-scheduled generation (the outermost circle). This information is already represented in the music; I just think it looks neat.
 ### Data
-Gridsynth plays one day of grid data for one region at a time. Each day is stored as a JSON file in the `data` folder, and `data/index.json` lists the days that appear in the song picker on the page.
+Gridsynth plays one day of grid data for one region at a time. Each day is stored as a JSON file in the `data` folder, and `data/index.json` lists the regions and days that appear in the pickers on the page.
 
 The original song, 'Victorian Energy Grid - June 11, 2021', uses data from AEMO. Its demand, spot price and total generation are five minute values, but its fuel mix is hourly, so the value for each generation source repeats across the hour.
 
 The more recent days come from the [Open Electricity](https://openelectricity.org.au) API (formerly OpenNEM), where every value is a five minute value. You can now hear the difference between, say, a summer day in SA and a spring day in NSW. For these days, total generation is the sum of every generating fuel source in the region, and battery generation is battery discharging.
 
 #### Adding more days
-You'll need Node.js 18 or later and a free API key from the [Open Electricity Platform](https://platform.openelectricity.org.au). Then run the fetch script with a region and a date, or a region and a date range:
+You'll need Node.js 18 or later and a free API key from the [Open Electricity Platform](https://platform.openelectricity.org.au). Then run the fetch script with a date, or a date range:
 
 ```
 export OPENELECTRICITY_API_KEY=your-api-key
-npm run fetch-data -- SA1 2026-01-15
-npm run fetch-data -- NSW1 2026-10-01 2026-10-03
+npm run fetch-data -- 2026-01-15
+npm run fetch-data -- 2026-10-01 2026-10-07
 ```
 
-The regions are `NSW1`, `QLD1`, `SA1`, `TAS1`, `VIC1` and `WEM` (Western Australia). Each day is saved to the `data` folder and added to `data/index.json`. The `default` value in `data/index.json` sets which song is loaded first.
+This fetches the day for every region: New South Wales (`NSW1`), Queensland (`QLD1`), South Australia (`SA1`), Tasmania (`TAS1`), Victoria (`VIC1`) and Western Australia (`WEM`). To fetch one region only, add `--region`, for example `--region SA1`.
 
-The script is careful with API requests, since the free plan has a daily limit:
+Each region's day is saved to the `data` folder and added to `data/index.json`, which is what fills the region and day pickers on the page. The `default` value in `data/index.json` sets which song is loaded first.
 
-* Each run uses two requests for every block of up to seven days (one for generation by fuel, one for spot price and demand).
-* Days that are already in the `data` folder are skipped without making any requests. Add `--force` to fetch them again.
+The script is careful with API requests, since the free plan has a daily limit. Visiting the site never uses any: the page only reads the files in the `data` folder.
+
+* One request returns every region in a network, so each block of up to seven days uses four requests for all regions (two for the National Electricity Market, two for Western Australia).
+* Days that are already in the `data` folder are not fetched again. Add `--force` to fetch them again.
 * If a run would need more than 20 requests, the script stops before making any. You can raise this with `--max-requests`.
 * The script reports how many requests it made when it finishes.
 
 Only complete days can be fetched, and the free plan covers the last two years.
+
+#### Fetching new days automatically
+The GitHub Actions workflow in `.github/workflows/fetch-data.yml` runs every morning and commits the previous day for every region, using four API requests a day. To turn it on, save your API key as a repository secret named `OPENELECTRICITY_API_KEY` (Settings, then Secrets and variables, then Actions). The workflow runs from the default branch, and it can also be started by hand from the Actions tab.
+
+The workflow runs the fetch script with `--last 3 --keep-days 30`. `--last 3` fetches the three most recent complete days, which fills in any day a previous run missed. `--keep-days 30` keeps a rolling month: days fetched with this option are removed again once they are more than 30 days old. Days you add by hand are never removed.
 
 #### Data licence
 The code in this repository is licensed under the GPL. The data is not: data from Open Electricity is licensed under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/), which allows non-commercial use with attribution.

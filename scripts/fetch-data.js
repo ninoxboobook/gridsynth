@@ -1,19 +1,32 @@
 #!/usr/bin/env node
 
 // Fetches one or more days of five-minute grid data from the Open Electricity
-// API (formerly OpenNEM) and saves each day as a gridsynth dataset in data/.
+// API (formerly OpenNEM) and saves each region's day as a gridsynth dataset in data/.
 //
 // Usage:
-//   node scripts/fetch-data.js <region> <date> [<end-date>] [--force] [--max-requests <n>]
+//   node scripts/fetch-data.js <date> [<end-date>] [options]
+//   node scripts/fetch-data.js --last <days> [options]
+//
+// Options:
+//   --region <code>       Only fetch this region (every region is fetched by default)
+//   --last <days>         Fetch the most recent complete days, instead of giving dates
+//   --keep-days <days>    Keep a rolling window: days fetched with this option are
+//                         removed again once they are more than this many days old
+//   --force               Fetch days again even if they already have a file
+//   --max-requests <n>    The most API requests one run may make (20 by default)
 //
 // Examples:
-//   node scripts/fetch-data.js SA1 2026-01-05
-//   node scripts/fetch-data.js NSW1 2026-10-01 2026-10-03
+//   node scripts/fetch-data.js 2026-01-15                  Every region, one day
+//   node scripts/fetch-data.js 2026-10-01 2026-10-07       Every region, one week
+//   node scripts/fetch-data.js 2026-01-15 --region SA1     One region only
+//   node scripts/fetch-data.js --last 3 --keep-days 30     What the daily workflow runs
 //
 // The API key is read from the OPENELECTRICITY_API_KEY environment variable.
-// Each run costs two API requests per block of up to seven days (one for
-// generation by fuel, one for price and demand). Days that already have a file
-// in data/ are skipped without making any requests, unless --force is given.
+// One request returns every region in a network, so each block of up to seven
+// days costs two API requests per network (one for generation by fuel, one for
+// price and demand): four requests for every region, or two if only National
+// Electricity Market regions or only Western Australia are fetched. Days that
+// already have a file in data/ are not fetched again, unless --force is given.
 
 const fs = require('fs');
 const path = require('path');
@@ -28,15 +41,22 @@ const STEPS_PER_DAY = (24 * 60) / INTERVAL_MINUTES;
 const MAX_DAYS_PER_REQUEST = 7; // The API allows up to 8 days of five-minute data per request
 const REQUESTS_PER_CHUNK = 2;
 const DEFAULT_MAX_REQUESTS = 20;
-const MAX_GAPS = 12; // An hour of missing intervals; any more and the day is treated as incomplete
+const MAX_GAPS = 12; // An hour of missing intervals. Price and demand with more missing than this are treated as incomplete.
 
+// The networks, and the offset of each network's market time from UTC in minutes
+const NETWORKS = {
+    NEM: { offsetMinutes: 600 },
+    WEM: { offsetMinutes: 480 },
+};
+
+// name is used in the region picker on the page, label in the song title
 const REGIONS = {
-    NSW1: { network: 'NEM', offsetMinutes: 600, label: 'New South Wales' },
-    QLD1: { network: 'NEM', offsetMinutes: 600, label: 'Queensland' },
-    SA1: { network: 'NEM', offsetMinutes: 600, label: 'South Australian' },
-    TAS1: { network: 'NEM', offsetMinutes: 600, label: 'Tasmanian' },
-    VIC1: { network: 'NEM', offsetMinutes: 600, label: 'Victorian' },
-    WEM: { network: 'WEM', offsetMinutes: 480, label: 'Western Australian' },
+    NSW1: { network: 'NEM', name: 'New South Wales', label: 'New South Wales' },
+    QLD1: { network: 'NEM', name: 'Queensland', label: 'Queensland' },
+    SA1: { network: 'NEM', name: 'South Australia', label: 'South Australian' },
+    TAS1: { network: 'NEM', name: 'Tasmania', label: 'Tasmanian' },
+    VIC1: { network: 'NEM', name: 'Victoria', label: 'Victorian' },
+    WEM: { network: 'WEM', name: 'Western Australia', label: 'Western Australian' },
 };
 
 // Open Electricity fuel tech groups, mapped to the gridsynth instrument they play
@@ -79,37 +99,65 @@ const datasetFile = (region, day) => path.join(DATA_DIR, datasetId(region, day) 
 // Command line arguments
 
 const parseArguments = (args) => {
-    const options = { force: false, maxRequests: DEFAULT_MAX_REQUESTS, positional: [] };
+    const options = { force: false, maxRequests: DEFAULT_MAX_REQUESTS, regions: [], last: null, keepDays: null, positional: [] };
     for (let i = 0; i < args.length; i++) {
         if (args[i] === '--force') {
             options.force = true;
         } else if (args[i] === '--max-requests') {
             options.maxRequests = Number(args[++i]);
+        } else if (args[i] === '--last') {
+            options.last = Number(args[++i]);
+        } else if (args[i] === '--keep-days') {
+            options.keepDays = Number(args[++i]);
+        } else if (args[i] === '--region') {
+            options.regions.push(...String(args[++i] || '').toUpperCase().split(',').filter(Boolean));
         } else {
             options.positional.push(args[i]);
         }
     }
 
-    const [region, start, end = start] = options.positional;
-    const usage = 'Usage: node scripts/fetch-data.js <region> <date> [<end-date>] [--force] [--max-requests <n>]\n' +
-        'Regions: ' + Object.keys(REGIONS).join(', ') + '. Dates: YYYY-MM-DD.';
+    const usage = 'Usage: node scripts/fetch-data.js <date> [<end-date>] [options]\n' +
+        '       node scripts/fetch-data.js --last <days> [options]\n' +
+        'Options: --region <code>, --keep-days <days>, --force, --max-requests <n>\n' +
+        'Dates: YYYY-MM-DD. Regions: ' + Object.keys(REGIONS).join(', ') + ' (every region is fetched if none is given).';
+    const isCount = (value) => Number.isInteger(value) && value >= 1;
 
-    if (!region || !start || options.positional.length > 3) fail(usage);
-    if (!REGIONS[region.toUpperCase()]) fail('Unknown region "' + region + '".\n' + usage);
+    if (args.includes('--region') && !options.regions.length) fail('--region needs a region code.\n' + usage);
+    options.regions.forEach((region) => {
+        if (!REGIONS[region]) fail('Unknown region "' + region + '".\n' + usage);
+    });
+    if (!isCount(options.maxRequests)) fail('--max-requests needs a whole number of 1 or more.');
+    if (options.keepDays !== null && !isCount(options.keepDays)) fail('--keep-days needs a whole number of 1 or more.');
+
+    const regions = Object.keys(REGIONS).filter((region) => !options.regions.length || options.regions.includes(region));
+
+    // Only complete days can be played, so today (in market time) and later are out
+    const today = regions.map((region) => networkNow(NETWORKS[REGIONS[region].network].offsetMinutes).slice(0, 10)).sort()[0];
+    const latest = addDays(today, -1);
+
+    let [start, end = start] = options.positional;
+    if (options.last !== null) {
+        if (!isCount(options.last)) fail('--last needs a whole number of 1 or more.');
+        if (options.positional.length) fail('Give either dates or --last, not both.\n' + usage);
+        start = addDays(latest, 1 - options.last);
+        end = latest;
+    }
+
+    if (!start || options.positional.length > 2) fail(usage);
     if (!isDay(start) || !isDay(end)) fail('Dates must be in YYYY-MM-DD format.\n' + usage);
     if (end < start) fail('The end date is before the start date.');
-    if (!Number.isInteger(options.maxRequests) || options.maxRequests < 1) fail('--max-requests needs a whole number of 1 or more.');
+    if (end > latest) fail('Only complete days can be fetched. The latest available day is ' + latest + '.');
 
-    return { region: region.toUpperCase(), start, end, force: options.force, maxRequests: options.maxRequests };
+    return { regions, start, end, today, force: options.force, maxRequests: options.maxRequests, keepDays: options.keepDays };
 };
 
-// Groups the days into blocks of consecutive days, so each block can be fetched in one go
+// Groups the days into blocks that each span no more than seven days, so each block can be fetched in one go
 
 const chunkDays = (days) => {
     const chunks = [];
     days.forEach((day) => {
         const chunk = chunks[chunks.length - 1];
-        if (chunk && chunk.length < MAX_DAYS_PER_REQUEST && addDays(chunk[chunk.length - 1], 1) === day) {
+        if (chunk && day < addDays(chunk[0], MAX_DAYS_PER_REQUEST)) {
             chunk.push(day);
         } else {
             chunks.push([day]);
@@ -157,25 +205,28 @@ const request = async (endpoint, params) => {
     return body.data || [];
 };
 
-// Sorts the values in an API response into days and five-minute steps.
-// Returns { name: { day: [288 values, null where missing] } }, where name is
-// the fuel tech group for generation data, or the metric for market data.
+// Sorts the values in an API response into regions, days and five-minute steps.
+// Returns { region: { name: { day: [288 values, null where missing] } } }, where
+// name is the fuel tech group for generation data, or the metric for market data.
 
-const collectSeries = (seriesList, region, days) => {
-    const offsetMinutes = REGIONS[region].offsetMinutes;
+const collectSeries = (seriesList, network, regions, days) => {
+    const offsetMinutes = NETWORKS[network].offsetMinutes;
     const collected = {};
+    regions.forEach((region) => {
+        collected[region] = {};
+    });
 
     seriesList.forEach((series) => {
         (series.results || []).forEach((result) => {
             const columns = result.columns || {};
-            const resultRegion = columns.region || columns.network_region;
-            if (resultRegion && resultRegion !== region) return;
+            const region = columns.region || columns.network_region || (regions.length === 1 ? regions[0] : null);
+            if (!collected[region]) return;
 
             const name = columns.fueltech_group || series.metric;
-            if (!collected[name]) {
-                collected[name] = {};
+            if (!collected[region][name]) {
+                collected[region][name] = {};
                 days.forEach((day) => {
-                    collected[name][day] = new Array(STEPS_PER_DAY).fill(null);
+                    collected[region][name][day] = new Array(STEPS_PER_DAY).fill(null);
                 });
             }
 
@@ -183,8 +234,8 @@ const collectSeries = (seriesList, region, days) => {
                 const local = new Date(Date.parse(timestamp) + offsetMinutes * 60000);
                 const day = local.toISOString().slice(0, 10);
                 const step = (local.getUTCHours() * 60 + local.getUTCMinutes()) / INTERVAL_MINUTES;
-                if (collected[name][day] && Number.isInteger(step) && typeof value === 'number') {
-                    collected[name][day][step] = value;
+                if (collected[region][name][day] && Number.isInteger(step) && typeof value === 'number') {
+                    collected[region][name][day][step] = value;
                 }
             });
         });
@@ -209,11 +260,31 @@ const fillGaps = (values) => {
     return { values: filled, gaps };
 };
 
+// Fills missing intervals in a generation source. Short gaps are filled from the nearest value.
+// A gap longer than an hour is treated as no generation, rather than guessing at what was generated.
+
+const fillGenerationGaps = (values) => {
+    const longGaps = values.slice();
+    let zeroed = 0;
+    for (let i = 0; i < values.length; i++) {
+        if (values[i] !== null) continue;
+        let end = i;
+        while (end < values.length && values[end] === null) end++;
+        if (end - i > MAX_GAPS) {
+            longGaps.fill(0, i, end);
+            zeroed += end - i;
+        }
+        i = end;
+    }
+    const { values: filled, gaps } = fillGaps(longGaps);
+    return { values: filled, gaps, zeroed };
+};
+
 const round = (value) => Math.round(value * 100) / 100;
 
 // Builds the dataset that gridsynth plays for one day
 
-const buildDataset = (region, day, generationSeries, marketSeries) => {
+const buildDataset = (region, day, generationSeries, marketSeries, rolling) => {
     const warnings = [];
     const zeros = () => new Array(STEPS_PER_DAY).fill(0);
 
@@ -237,12 +308,10 @@ const buildDataset = (region, day, generationSeries, marketSeries) => {
     Object.keys(generationSeries).forEach((group) => {
         if (IGNORED_GROUPS.includes(group)) return;
 
-        const { values, gaps } = fillGaps(generationSeries[group][day]);
+        const { values, gaps, zeroed } = fillGenerationGaps(generationSeries[group][day]);
         if (!values) return;
-        if (gaps > MAX_GAPS) {
-            throw new Error('The ' + group + ' generation data for ' + region + ' on ' + day + ' is incomplete (' + gaps + ' of ' + STEPS_PER_DAY + ' intervals missing).');
-        }
         if (gaps) warnings.push(gaps + ' missing ' + group + ' interval(s) filled from the nearest value');
+        if (zeroed) warnings.push(zeroed + ' missing ' + group + ' interval(s) in a gap of more than an hour treated as no generation');
         groupsFound++;
 
         // Anything below zero is not generation, so it does not count towards the mix
@@ -263,6 +332,7 @@ const buildDataset = (region, day, generationSeries, marketSeries) => {
             region,
             date: day,
             intervalMinutes: INTERVAL_MINUTES,
+            ...(rolling ? { rolling: true } : {}), // Part of a rolling window, so it is removed once it is old enough
             source: {
                 name: 'Open Electricity',
                 url: 'https://openelectricity.org.au',
@@ -294,85 +364,128 @@ const serialiseDataset = (dataset) => {
     return '{\n' + lines.join(',\n') + '\n}\n';
 };
 
-// Rebuilds the list of datasets that the gridsynth page offers, from the files in data/
+// Rebuilds the list of regions and days that the gridsynth page offers, from the files in data/
 
 const updateIndex = () => {
-    let index = { default: null, datasets: [] };
+    let index = {};
     if (fs.existsSync(INDEX_FILE)) index = JSON.parse(fs.readFileSync(INDEX_FILE, 'utf8'));
 
-    index.datasets = fs.readdirSync(DATA_DIR)
+    const datasets = fs.readdirSync(DATA_DIR)
         .filter((file) => file.endsWith('.json') && file !== path.basename(INDEX_FILE))
         .map((file) => {
-            const { id, title, region, date } = JSON.parse(fs.readFileSync(path.join(DATA_DIR, file), 'utf8'));
-            return { id, title, region, date, file };
+            const { region, date } = JSON.parse(fs.readFileSync(path.join(DATA_DIR, file), 'utf8'));
+            return { region, date, file };
         })
         .sort((a, b) => a.date.localeCompare(b.date) || a.region.localeCompare(b.region));
 
-    if (!index.datasets.some((dataset) => dataset.id === index.default)) {
-        index.default = index.datasets.length ? index.datasets[0].id : null;
-    }
+    const regions = Object.keys(REGIONS)
+        .filter((region) => datasets.some((dataset) => dataset.region === region))
+        .map((region) => ({ code: region, name: REGIONS[region].name }));
 
-    fs.writeFileSync(INDEX_FILE, JSON.stringify(index, null, 2) + '\n');
-    return index;
+    // The default is the song that is loaded first. It is kept as long as its file still exists.
+    const isAvailable = (choice) => choice && datasets.some((dataset) => dataset.region === choice.region && dataset.date === choice.date);
+    let defaultDataset = isAvailable(index.default) ? index.default : null;
+    if (!defaultDataset && datasets.length) defaultDataset = { region: datasets[0].region, date: datasets[0].date };
+
+    fs.writeFileSync(INDEX_FILE, JSON.stringify({ default: defaultDataset, regions, datasets }, null, 2) + '\n');
+    return datasets;
+};
+
+// Removes days that were fetched as part of a rolling window and have since fallen out of it.
+// Days fetched without --keep-days are never removed.
+
+const removeOldDays = (today, keepDays) => {
+    if (keepDays === null || !fs.existsSync(DATA_DIR)) return;
+
+    const oldest = addDays(today, -keepDays);
+    let removed = 0;
+    fs.readdirSync(DATA_DIR)
+        .filter((file) => file.endsWith('.json') && file !== path.basename(INDEX_FILE))
+        .forEach((file) => {
+            const { rolling, date } = JSON.parse(fs.readFileSync(path.join(DATA_DIR, file), 'utf8'));
+            if (rolling === true && date < oldest) {
+                fs.unlinkSync(path.join(DATA_DIR, file));
+                removed++;
+            }
+        });
+    if (removed) console.log('Removed ' + removed + ' dataset(s) from before ' + oldest + ' (the rolling window is ' + keepDays + ' days).');
 };
 
 const main = async () => {
-    const { region, start, end, force, maxRequests } = parseArguments(process.argv.slice(2));
-    const { network, offsetMinutes } = REGIONS[region];
-
-    // Only complete days can be played, so today (in the network's local time) and later are out
-    const today = networkNow(offsetMinutes).slice(0, 10);
-    if (end >= today) fail('Only complete days can be fetched. The latest available day for ' + region + ' is ' + addDays(today, -1) + '.');
+    const { regions, start, end, today, force, maxRequests, keepDays } = parseArguments(process.argv.slice(2));
+    const isWanted = (region, day) => force || !fs.existsSync(datasetFile(region, day));
+    const networks = Object.keys(NETWORKS).filter((network) => regions.some((region) => REGIONS[region].network === network));
 
     const days = [];
     for (let day = start; day <= end; day = addDays(day, 1)) days.push(day);
 
-    const wanted = days.filter((day) => force || !fs.existsSync(datasetFile(region, day)));
-    const skipped = days.length - wanted.length;
-    if (skipped) console.log('Skipping ' + skipped + ' day(s) already in data/ (use --force to fetch them again).');
-    if (!wanted.length) {
+    // One request covers every region in a network, so the days are planned network by network
+    const plans = networks.map((network) => {
+        const networkRegions = regions.filter((region) => REGIONS[region].network === network);
+        const wantedDays = days.filter((day) => networkRegions.some((region) => isWanted(region, day)));
+        return { network, regions: networkRegions, chunks: chunkDays(wantedDays) };
+    }).filter((plan) => plan.chunks.length);
+
+    const existing = regions.length * days.length - regions.reduce((count, region) => count + days.filter((day) => isWanted(region, day)).length, 0);
+    if (existing) console.log('Skipping ' + existing + ' region day(s) already in data/ (use --force to fetch them again).');
+    if (!plans.length) {
+        removeOldDays(today, keepDays);
         updateIndex();
         console.log('Nothing to fetch. API requests made: 0.');
         return;
     }
 
-    const chunks = chunkDays(wanted);
-    const plannedRequests = chunks.length * REQUESTS_PER_CHUNK;
+    const plannedRequests = plans.reduce((count, plan) => count + plan.chunks.length * REQUESTS_PER_CHUNK, 0);
     if (plannedRequests > maxRequests) {
-        fail('Fetching ' + wanted.length + ' day(s) needs ' + plannedRequests + ' API requests, which is over the limit of ' + maxRequests +
+        fail('This needs ' + plannedRequests + ' API requests, which is over the limit of ' + maxRequests +
             ' for one run.\nFetch a shorter range, or raise the limit with --max-requests ' + plannedRequests + '.');
     }
 
     if (!API_KEY) console.warn('OPENELECTRICITY_API_KEY is not set, so requests will be sent without a key.');
-    console.log('Fetching ' + wanted.length + ' day(s) for ' + region + ' using ' + plannedRequests + ' API request(s).');
+    console.log('Fetching ' + days.length + ' day(s) for ' + regions.join(', ') + ' using ' + plannedRequests + ' API request(s).');
 
     fs.mkdirSync(DATA_DIR, { recursive: true });
+    let saved = 0;
+    const problems = [];
 
-    for (const chunk of chunks) {
-        const range = {
-            interval: INTERVAL_MINUTES + 'm',
-            date_start: chunk[0] + 'T00:00:00',
-            date_end: addDays(chunk[chunk.length - 1], 1) + 'T00:00:00',
-            network_region: region,
-            primary_grouping: 'network_region',
-        };
+    for (const plan of plans) {
+        for (const chunk of plan.chunks) {
+            const range = {
+                interval: INTERVAL_MINUTES + 'm',
+                date_start: chunk[0] + 'T00:00:00',
+                date_end: addDays(chunk[chunk.length - 1], 1) + 'T00:00:00',
+                primary_grouping: 'network_region',
+            };
+            // With no region given, the API returns every region in the network
+            if (plan.regions.length === 1) range.network_region = plan.regions[0];
 
-        const generationData = await request('/data/network/' + network, { ...range, metrics: 'power', secondary_grouping: 'fueltech_group' });
-        const marketData = await request('/market/network/' + network, { ...range, metrics: ['price', 'demand'] });
+            const generationData = await request('/data/network/' + plan.network, { ...range, metrics: 'power', secondary_grouping: 'fueltech_group' });
+            const marketData = await request('/market/network/' + plan.network, { ...range, metrics: ['price', 'demand'] });
 
-        const generationSeries = collectSeries(generationData, region, chunk);
-        const marketSeries = collectSeries(marketData, region, chunk);
+            const generationSeries = collectSeries(generationData, plan.network, plan.regions, chunk);
+            const marketSeries = collectSeries(marketData, plan.network, plan.regions, chunk);
 
-        chunk.forEach((day) => {
-            const { dataset, warnings } = buildDataset(region, day, generationSeries, marketSeries);
-            fs.writeFileSync(datasetFile(region, day), serialiseDataset(dataset));
-            console.log('Saved data/' + dataset.id + '.json (' + dataset.title + ')');
-            warnings.forEach((warning) => console.log('  Note: ' + warning));
-        });
+            chunk.forEach((day) => {
+                plan.regions.filter((region) => isWanted(region, day)).forEach((region) => {
+                    try {
+                        const { dataset, warnings } = buildDataset(region, day, generationSeries[region], marketSeries[region], keepDays !== null);
+                        fs.writeFileSync(datasetFile(region, day), serialiseDataset(dataset));
+                        saved++;
+                        console.log('Saved data/' + dataset.id + '.json (' + dataset.title + ')');
+                        warnings.forEach((warning) => console.log('  Note: ' + warning));
+                    } catch (error) {
+                        problems.push(error.message);
+                    }
+                });
+            });
+        }
     }
 
-    const index = updateIndex();
-    console.log('data/index.json now lists ' + index.datasets.length + ' dataset(s). API requests made: ' + requestCount + '.');
+    removeOldDays(today, keepDays);
+    const datasets = updateIndex();
+    problems.forEach((problem) => console.error('Not saved: ' + problem));
+    console.log('Saved ' + saved + ' dataset(s). data/index.json now lists ' + datasets.length + '. API requests made: ' + requestCount + '.');
+    if (problems.length) process.exitCode = 1;
 };
 
 main().catch((error) => {

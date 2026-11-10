@@ -31,8 +31,14 @@
             <h2 id="now-playing">Now playing</h2>
             <p id="song-title" aria-live="polite">Loading grid data</p>
             <div id="song-picker" hidden>
-                <label for="song-select">Choose another day</label>
-                <select id="song-select"></select>
+                <div>
+                    <label for="region-select">Region</label>
+                    <select id="region-select"></select>
+                </div>
+                <div>
+                    <label for="date-select">Day</label>
+                    <select id="date-select"></select>
+                </div>
             </div>
             <button id="play-button" class="emphasis">Play</button>
             <button id="stop-button">Stop</button>

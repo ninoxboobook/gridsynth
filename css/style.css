@@ -118,7 +118,15 @@ main {
 }
 
 #song-picker {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1em;
     margin-bottom: 2em;
+}
+
+#song-picker[hidden] {
+    display: none;
 }
 
 #song-picker label {
@@ -126,7 +134,7 @@ main {
     margin-bottom: .5em;
 }
 
-#song-select {
+#song-picker select {
     border: 2px #fff solid;
     background-color: transparent;
     color: #fff;
@@ -137,7 +145,7 @@ main {
     padding: 8px 16px;
 }
 
-#song-select option {
+#song-picker option {
     background-color: #fff;
     color: #1e0342;
 }

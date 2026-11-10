@@ -49,7 +49,7 @@ function createSong(dataset) {
 
     bpmData = convertData(dataset.demand, createMaxValueArray(dataset.demand), 60, 30);
     tempoIndex = 0;
-    Tone.Transport.bpm.value = bpmData[0]; // Initial tempo
+    setTempo(bpmData[0]); // Initial tempo
 
     generationSources.forEach((source) => {
         let generation = dataset.generation[source.name];
@@ -158,30 +158,65 @@ async function loadSong(file) {
     }
 }
 
-// Fills the song picker with the available datasets and loads the default one
+// Sets up the region and day pickers with the available datasets, and loads the default song
+
+function formatDate(date) {
+    return new Date(date + "T00:00:00Z").toLocaleDateString("en-US", { timeZone: "UTC", month: "long", day: "numeric", year: "numeric" });
+}
 
 async function setUpSongs() {
-    const songSelect = document.getElementById("song-select");
+    const regionSelect = document.getElementById("region-select");
+    const dateSelect = document.getElementById("date-select");
 
     try {
         const datasetList = await getDatasetList();
 
-        datasetList.datasets.forEach((dataset) => {
-            const option = document.createElement("option");
-            option.value = dataset.file;
-            option.textContent = dataset.title;
-            option.selected = dataset.id == datasetList.default;
-            songSelect.appendChild(option);
-        });
+        // Lists the days available for a region, most recent first, keeping the current day selected if the region has it
 
-        // The picker is only needed when there is more than one song to choose from
+        const showDates = (region, selectedDate) => {
+            const dates = datasetList.datasets
+                .filter((dataset) => dataset.region == region)
+                .map((dataset) => dataset.date)
+                .sort()
+                .reverse();
+
+            dateSelect.textContent = "";
+            dates.forEach((date) => {
+                const option = document.createElement("option");
+                option.value = date;
+                option.textContent = formatDate(date);
+                dateSelect.appendChild(option);
+            });
+            dateSelect.value = dates.includes(selectedDate) ? selectedDate : dates[0];
+        };
+
+        const loadSelectedSong = () => {
+            const dataset = datasetList.datasets.find((dataset) => {
+                return dataset.region == regionSelect.value && dataset.date == dateSelect.value;
+            });
+            return loadSong(dataset.file);
+        };
+
+        datasetList.regions.forEach((region) => {
+            const option = document.createElement("option");
+            option.value = region.code;
+            option.textContent = region.name;
+            regionSelect.appendChild(option);
+        });
+        regionSelect.value = datasetList.default.region;
+        showDates(datasetList.default.region, datasetList.default.date);
+
+        // The pickers are only needed when there is more than one song to choose from
         document.getElementById("song-picker").hidden = datasetList.datasets.length < 2;
 
-        songSelect.addEventListener("change", function () {
-            loadSong(songSelect.value);
+        regionSelect.addEventListener("change", function () {
+            showDates(regionSelect.value, dateSelect.value);
+            loadSelectedSong();
         });
 
-        await loadSong(songSelect.value);
+        dateSelect.addEventListener("change", loadSelectedSong);
+
+        await loadSelectedSong();
     } catch (error) {
         console.error(error);
         document.getElementById("song-title").textContent = "Sorry, the grid data could not be loaded.";

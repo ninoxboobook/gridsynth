@@ -1,0 +1,59 @@
+name: Fetch grid data
+
+# Fetches the most recent complete days of grid data for every region and commits
+# them to the data folder. It needs an Open Electricity API key saved as a
+# repository secret named OPENELECTRICITY_API_KEY.
+#
+# Each run uses four API requests (two for the National Electricity Market, two
+# for Western Australia), or none if the days are already in the data folder.
+
+on:
+  schedule:
+    # 20:17 UTC is 6:17am AEST, once the previous day has finished in every region
+    - cron: '17 20 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fetch-data
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Fetching the last three days fills in any day that a previous run missed, at no
+      # extra cost in API requests. Days fetched here are removed after 30 days, so the
+      # data folder holds a rolling month. Days added by hand are never removed.
+      - name: Fetch the latest days
+        id: fetch
+        continue-on-error: true
+        env:
+          OPENELECTRICITY_API_KEY: ${{ secrets.OPENELECTRICITY_API_KEY }}
+        run: node scripts/fetch-data.js --last 3 --keep-days 30 --max-requests 8
+
+      - name: Commit the new data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data
+          if git diff --cached --quiet; then
+            echo "No new data to commit."
+          else
+            git commit -m "Update grid data"
+            git push
+          fi
+
+      - name: Report days that could not be fetched
+        if: steps.fetch.outcome == 'failure'
+        run: |
+          echo "Some days could not be fetched. They will be tried again on the next run."
+          exit 1

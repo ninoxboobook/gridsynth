@@ -186,7 +186,10 @@ function CurrentVolume(volumes, instrument) {
 
 // Changes tempo according to converted data source
 
+const minTempo = 10; // Stops the song from stalling if demand drops to zero or below
+
 const setTempo = (tempo) => {
+    tempo = Math.max(tempo, minTempo);
     console.log('BPM: ' + tempo);
     Tone.Transport.bpm.value = tempo;
 }
