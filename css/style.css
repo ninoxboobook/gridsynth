@@ -45,6 +45,11 @@ body {
     z-index: -999;
 }
 
+/* The header sits in the top row and the main content in the middle row. The top and
+   bottom rows share the leftover space, which keeps the main content in the centre of
+   the screen. On small screens the top row grows to fit the header, so the two never
+   overlap, and the page scrolls if there is not enough room. */
+
 #content-wrapper {
     position: absolute;
     top: 0;
@@ -52,7 +57,10 @@ body {
     right: 0;
     bottom: 0;
     z-index: 999;
-    display: flex;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: minmax(min-content, 1fr) auto minmax(0, 1fr);
+    overflow-y: auto;
 }
 
 .skip-link {
@@ -71,9 +79,7 @@ body {
 }
 
 header {
-    position: absolute;
-    left: 0;
-    right: 0;
+    align-self: start;
     z-index: 998;
     padding: 1.5em 2.5em 0 2.5em;
     display: flex;
@@ -112,8 +118,8 @@ nav a {
 
 main {
     width: 80%;
-    margin: auto;
-    overflow: auto;
+    margin: 0 auto;
+    display: flow-root;
     text-align: center;
 }
 
