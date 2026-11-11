@@ -79,7 +79,11 @@ Only complete days can be fetched, and the free plan covers the last two years.
 #### Fetching new days automatically
 The GitHub Actions workflow in `.github/workflows/fetch-data.yml` runs every morning and commits the previous day for every region, using four API requests a day. To turn it on, save your API key as a repository secret named `OPENELECTRICITY_API_KEY` (Settings, then Secrets and variables, then Actions). The workflow runs from the default branch, and it can also be started by hand from the Actions tab.
 
-The workflow runs the fetch script with `--last 3 --keep-days 30`. `--last 3` fetches the three most recent complete days, which fills in any day a previous run missed. `--keep-days 30` keeps a rolling month: days fetched with this option are removed again once they are more than 30 days old. Days you add by hand are never removed.
+The workflow runs the fetch script with `--last 3`, which fetches the three most recent complete days. That fills in any day a previous run missed, at no extra cost in API requests. Days are kept for good, so the list of days grows by one each day.
+
+The workflow commits straight to the default branch, so that branch must allow pushes without a pull request.
+
+If you would rather keep a rolling window, add `--keep-days 30` to the command in the workflow. Days fetched with that option are removed again once they are more than 30 days old; days fetched without it are never removed.
 
 #### Data licence
 The code in this repository is licensed under the GPL. The data is not: data from Open Electricity is licensed under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/), which allows non-commercial use with attribution.

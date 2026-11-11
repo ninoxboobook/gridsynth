@@ -19,7 +19,7 @@
 //   node scripts/fetch-data.js 2026-01-15                  Every region, one day
 //   node scripts/fetch-data.js 2026-10-01 2026-10-07       Every region, one week
 //   node scripts/fetch-data.js 2026-01-15 --region SA1     One region only
-//   node scripts/fetch-data.js --last 3 --keep-days 30     What the daily workflow runs
+//   node scripts/fetch-data.js --last 3                    What the daily workflow runs
 //
 // The API key is read from the OPENELECTRICITY_API_KEY environment variable.
 // One request returns every region in a network, so each block of up to seven
