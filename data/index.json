@@ -97,6 +97,96 @@
     },
     {
       "region": "NSW1",
+      "date": "2026-10-12",
+      "file": "NSW1-2026-10-12.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-10-12",
+      "file": "QLD1-2026-10-12.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-10-12",
+      "file": "SA1-2026-10-12.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-10-12",
+      "file": "TAS1-2026-10-12.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-10-12",
+      "file": "VIC1-2026-10-12.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-10-12",
+      "file": "WEM-2026-10-12.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-10-13",
+      "file": "NSW1-2026-10-13.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-10-13",
+      "file": "QLD1-2026-10-13.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-10-13",
+      "file": "SA1-2026-10-13.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-10-13",
+      "file": "TAS1-2026-10-13.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-10-13",
+      "file": "VIC1-2026-10-13.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-10-13",
+      "file": "WEM-2026-10-13.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-10-14",
+      "file": "NSW1-2026-10-14.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-10-14",
+      "file": "QLD1-2026-10-14.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-10-14",
+      "file": "SA1-2026-10-14.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-10-14",
+      "file": "TAS1-2026-10-14.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-10-14",
+      "file": "VIC1-2026-10-14.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-10-14",
+      "file": "WEM-2026-10-14.json"
+    },
+    {
+      "region": "NSW1",
       "date": "2026-10-15",
       "file": "NSW1-2026-10-15.json"
     },
@@ -127,6 +217,716 @@
     },
     {
       "region": "NSW1",
+      "date": "2026-10-16",
+      "file": "NSW1-2026-10-16.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-10-16",
+      "file": "QLD1-2026-10-16.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-10-16",
+      "file": "SA1-2026-10-16.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-10-16",
+      "file": "TAS1-2026-10-16.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-10-16",
+      "file": "VIC1-2026-10-16.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-10-16",
+      "file": "WEM-2026-10-16.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-10-17",
+      "file": "NSW1-2026-10-17.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-10-17",
+      "file": "QLD1-2026-10-17.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-10-17",
+      "file": "SA1-2026-10-17.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-10-17",
+      "file": "TAS1-2026-10-17.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-10-17",
+      "file": "VIC1-2026-10-17.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-10-17",
+      "file": "WEM-2026-10-17.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-10-18",
+      "file": "NSW1-2026-10-18.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-10-18",
+      "file": "QLD1-2026-10-18.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-10-18",
+      "file": "SA1-2026-10-18.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-10-18",
+      "file": "TAS1-2026-10-18.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-10-18",
+      "file": "VIC1-2026-10-18.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-10-18",
+      "file": "WEM-2026-10-18.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-10-19",
+      "file": "NSW1-2026-10-19.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-10-19",
+      "file": "QLD1-2026-10-19.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-10-19",
+      "file": "SA1-2026-10-19.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-10-19",
+      "file": "TAS1-2026-10-19.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-10-19",
+      "file": "VIC1-2026-10-19.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-10-19",
+      "file": "WEM-2026-10-19.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-10-20",
+      "file": "NSW1-2026-10-20.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-10-20",
+      "file": "QLD1-2026-10-20.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-10-20",
+      "file": "SA1-2026-10-20.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-10-20",
+      "file": "TAS1-2026-10-20.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-10-20",
+      "file": "VIC1-2026-10-20.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-10-20",
+      "file": "WEM-2026-10-20.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-10-21",
+      "file": "NSW1-2026-10-21.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-10-21",
+      "file": "QLD1-2026-10-21.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-10-21",
+      "file": "SA1-2026-10-21.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-10-21",
+      "file": "TAS1-2026-10-21.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-10-21",
+      "file": "VIC1-2026-10-21.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-10-21",
+      "file": "WEM-2026-10-21.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-10-22",
+      "file": "NSW1-2026-10-22.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-10-22",
+      "file": "QLD1-2026-10-22.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-10-22",
+      "file": "SA1-2026-10-22.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-10-22",
+      "file": "TAS1-2026-10-22.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-10-22",
+      "file": "VIC1-2026-10-22.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-10-22",
+      "file": "WEM-2026-10-22.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-10-23",
+      "file": "NSW1-2026-10-23.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-10-23",
+      "file": "QLD1-2026-10-23.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-10-23",
+      "file": "SA1-2026-10-23.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-10-23",
+      "file": "TAS1-2026-10-23.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-10-23",
+      "file": "VIC1-2026-10-23.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-10-23",
+      "file": "WEM-2026-10-23.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-10-24",
+      "file": "NSW1-2026-10-24.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-10-24",
+      "file": "QLD1-2026-10-24.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-10-24",
+      "file": "SA1-2026-10-24.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-10-24",
+      "file": "TAS1-2026-10-24.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-10-24",
+      "file": "VIC1-2026-10-24.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-10-24",
+      "file": "WEM-2026-10-24.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-10-25",
+      "file": "NSW1-2026-10-25.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-10-25",
+      "file": "QLD1-2026-10-25.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-10-25",
+      "file": "SA1-2026-10-25.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-10-25",
+      "file": "TAS1-2026-10-25.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-10-25",
+      "file": "VIC1-2026-10-25.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-10-25",
+      "file": "WEM-2026-10-25.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-10-26",
+      "file": "NSW1-2026-10-26.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-10-26",
+      "file": "QLD1-2026-10-26.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-10-26",
+      "file": "SA1-2026-10-26.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-10-26",
+      "file": "TAS1-2026-10-26.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-10-26",
+      "file": "VIC1-2026-10-26.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-10-26",
+      "file": "WEM-2026-10-26.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-10-27",
+      "file": "NSW1-2026-10-27.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-10-27",
+      "file": "QLD1-2026-10-27.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-10-27",
+      "file": "SA1-2026-10-27.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-10-27",
+      "file": "TAS1-2026-10-27.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-10-27",
+      "file": "VIC1-2026-10-27.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-10-27",
+      "file": "WEM-2026-10-27.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-10-28",
+      "file": "NSW1-2026-10-28.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-10-28",
+      "file": "QLD1-2026-10-28.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-10-28",
+      "file": "SA1-2026-10-28.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-10-28",
+      "file": "TAS1-2026-10-28.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-10-28",
+      "file": "VIC1-2026-10-28.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-10-28",
+      "file": "WEM-2026-10-28.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-10-29",
+      "file": "NSW1-2026-10-29.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-10-29",
+      "file": "QLD1-2026-10-29.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-10-29",
+      "file": "SA1-2026-10-29.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-10-29",
+      "file": "TAS1-2026-10-29.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-10-29",
+      "file": "VIC1-2026-10-29.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-10-29",
+      "file": "WEM-2026-10-29.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-10-30",
+      "file": "NSW1-2026-10-30.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-10-30",
+      "file": "QLD1-2026-10-30.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-10-30",
+      "file": "SA1-2026-10-30.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-10-30",
+      "file": "TAS1-2026-10-30.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-10-30",
+      "file": "VIC1-2026-10-30.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-10-30",
+      "file": "WEM-2026-10-30.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-10-31",
+      "file": "NSW1-2026-10-31.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-10-31",
+      "file": "QLD1-2026-10-31.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-10-31",
+      "file": "SA1-2026-10-31.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-10-31",
+      "file": "TAS1-2026-10-31.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-10-31",
+      "file": "VIC1-2026-10-31.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-11-01",
+      "file": "NSW1-2026-11-01.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-11-01",
+      "file": "QLD1-2026-11-01.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-11-01",
+      "file": "SA1-2026-11-01.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-11-01",
+      "file": "TAS1-2026-11-01.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-11-01",
+      "file": "VIC1-2026-11-01.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-11-02",
+      "file": "NSW1-2026-11-02.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-11-02",
+      "file": "QLD1-2026-11-02.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-11-02",
+      "file": "SA1-2026-11-02.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-11-02",
+      "file": "TAS1-2026-11-02.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-11-02",
+      "file": "VIC1-2026-11-02.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-11-02",
+      "file": "WEM-2026-11-02.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-11-03",
+      "file": "NSW1-2026-11-03.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-11-03",
+      "file": "QLD1-2026-11-03.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-11-03",
+      "file": "SA1-2026-11-03.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-11-03",
+      "file": "TAS1-2026-11-03.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-11-03",
+      "file": "VIC1-2026-11-03.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-11-03",
+      "file": "WEM-2026-11-03.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-11-04",
+      "file": "NSW1-2026-11-04.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-11-04",
+      "file": "QLD1-2026-11-04.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-11-04",
+      "file": "SA1-2026-11-04.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-11-04",
+      "file": "TAS1-2026-11-04.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-11-04",
+      "file": "VIC1-2026-11-04.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-11-04",
+      "file": "WEM-2026-11-04.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-11-05",
+      "file": "NSW1-2026-11-05.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-11-05",
+      "file": "QLD1-2026-11-05.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-11-05",
+      "file": "SA1-2026-11-05.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-11-05",
+      "file": "TAS1-2026-11-05.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-11-05",
+      "file": "VIC1-2026-11-05.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-11-05",
+      "file": "WEM-2026-11-05.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-11-06",
+      "file": "NSW1-2026-11-06.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-11-06",
+      "file": "QLD1-2026-11-06.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-11-06",
+      "file": "SA1-2026-11-06.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-11-06",
+      "file": "TAS1-2026-11-06.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-11-06",
+      "file": "VIC1-2026-11-06.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-11-06",
+      "file": "WEM-2026-11-06.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-11-07",
+      "file": "NSW1-2026-11-07.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-11-07",
+      "file": "QLD1-2026-11-07.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-11-07",
+      "file": "SA1-2026-11-07.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-11-07",
+      "file": "TAS1-2026-11-07.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-11-07",
+      "file": "VIC1-2026-11-07.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-11-07",
+      "file": "WEM-2026-11-07.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-11-08",
+      "file": "NSW1-2026-11-08.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-11-08",
+      "file": "QLD1-2026-11-08.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-11-08",
+      "file": "SA1-2026-11-08.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-11-08",
+      "file": "TAS1-2026-11-08.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-11-08",
+      "file": "VIC1-2026-11-08.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-11-08",
+      "file": "WEM-2026-11-08.json"
+    },
+    {
+      "region": "NSW1",
       "date": "2026-11-09",
       "file": "NSW1-2026-11-09.json"
     },
@@ -154,6 +954,36 @@
       "region": "WEM",
       "date": "2026-11-09",
       "file": "WEM-2026-11-09.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-11-10",
+      "file": "NSW1-2026-11-10.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-11-10",
+      "file": "QLD1-2026-11-10.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-11-10",
+      "file": "SA1-2026-11-10.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-11-10",
+      "file": "TAS1-2026-11-10.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-11-10",
+      "file": "VIC1-2026-11-10.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-11-10",
+      "file": "WEM-2026-11-10.json"
     }
   ]
 }
