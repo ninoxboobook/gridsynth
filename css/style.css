@@ -2,38 +2,8 @@ body {
     font-family: 'Telstra Akkurat', Helvetica, Arial, sans-serif;
     color: #fff;
     font-size: 16px;
-    background-blend-mode: screen;
-    margin: 0;
-}
-
-
-@media (min-width: 320px) {
-    body {
-        background: url('../assets/gridsynth-bg-mobile.png');
-        background-size: cover;
-        background-repeat: no-repeat;
-    }
-}
-
-@media (min-width: 540px) {
-    body {
-        background: url('../assets/gridsynth-bg-tablet.png');
-        background-size: cover;
-        background-repeat: no-repeat;
-    }
-}
-
-@media (min-width: 1024px) {
-    body {
-        background: url('../assets/gridsynth-bg-desktop.png');
-        background-size: cover;
-        background-repeat: no-repeat;
-    }
-}
-
-.high-contrast {
-    background-image: unset;
     background-color: #1e0342;
+    margin: 0;
 }
 
 #p5-wrapper {
@@ -195,82 +165,17 @@ button:hover {
     text-decoration: underline;
 }
 
-.toggle-button {
-    padding: 0;
-    margin: 0 0 0 .5em;
-    font-size: 1em;
-    min-width: 44px;
-    min-height: 44px;
-}
-
-[role="switch"][aria-checked="false"] :first-child, 
-[role="switch"][aria-checked="true"] :last-child {
-  background: #fff;
-  color: #6628e7;
-  transition: all ease-in-out .2s;
-}
-
-.high-contrast [role="switch"][aria-checked="false"] :first-child, 
-.high-contrast [role="switch"][aria-checked="true"] :last-child, .high-contrast .emphasis, .high-contrast .emphasis:hover, .high-contrast .emphasis::before {
-  background: #fff;
-  color: #1e0342;
-  -webkit-box-shadow: unset;
-    box-shadow: unset;
-    transition: all ease-in-out .2s;
-
-}
-
-[role="switch"][aria-checked="false"] :first-child {
-    padding-right: .7em;
-    transition: all ease-in-out .2s;
-}
-
-[role="switch"][aria-checked="true"] :last-child {
-    padding-left: .7em;
-    transition: all ease-in-out .2s;
-}
-
-.toggle-button span {
-    display: inline-block;
-    padding: 0.25em .5em 0.3em .5em;
-    border-radius: 30px;
-    transition: all ease-in-out .2s;
-}
-
 button.emphasis {
-    position: relative;
     background-color: #fff;
     border-color: #fff;
-    color: #6628e7;
+    color: #1e0342;
     transition: all ease-in-out .2s;
 }
 
 button.emphasis:hover {
     background-color: #fff;
     border-color: #fff;
-    color: #6628e7;
-    transition: all ease-in-out .2s;
-}
-
-button.emphasis::before {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    content: '';
-    border-color: #6628e7;
-    border-radius: 80px;
-    -webkit-box-shadow: 0px 3px 9px 3px rgba(105, 50, 231, 0.6);
-    box-shadow: 0px 3px 9px 3px rgba(105, 50, 231, 0.6);
-    mix-blend-mode: multiply;
-    transition: all ease-in-out .2s;
-    z-index: -998;
-}
-
-button.emphasis:hover::before {
-    -webkit-box-shadow: 0px 0px 0px 0px rgba(105, 50, 231, 0);
-    box-shadow: 0px 0px 0px 0px rgba(105, 50, 231, 0);
+    color: #1e0342;
     transition: all ease-in-out .2s;
 }
 
@@ -288,8 +193,8 @@ button.emphasis:hover::before {
 }
 
 #about {
-    background: #fff;
-    color:#1e0342;
+    background: #311a5d;
+    color: #fff;
     padding: 3em 4em;
     /* border-radius: 30px 0 0 30px; */
     position:fixed;
@@ -300,11 +205,6 @@ button.emphasis:hover::before {
     overflow: auto;
     z-index: 99999;
     transition: right ease-in-out 1s;
-}
-
-.high-contrast #about {
-    background: #311a5d;
-    color: #fff;
 }
 
 #about.hidden {
@@ -318,9 +218,9 @@ button.emphasis:hover::before {
     font-size: 1.15em;
 }
 
-/* .high-contrast #about p, .high-contrast #about ul {
-    font-weight: 400;
-} */
+#about a {
+    color: #fff;
+}
 
 #about ul ul {
     font-size: 1em;

@@ -235,14 +235,6 @@ window.addEventListener("load", function () {
 
     document.getElementById("stop-button").addEventListener("click", stop);
 
-    const contrastButton = document.getElementById("contrastButton");
-
-    contrastButton.addEventListener("click", function () {
-    let checked = contrastButton.getAttribute("aria-checked") === "true";
-    contrastButton.setAttribute("aria-checked", String(!checked));
-        document.body.classList.toggle("high-contrast");
-    });
-
     document.getElementById("about-button").addEventListener("click", function () {
         document.getElementById("about").classList.toggle("hidden");
     })
