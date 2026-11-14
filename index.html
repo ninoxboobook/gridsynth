@@ -11,6 +11,7 @@
     <script src="js/data.js"></script>
     <script src="js/controls.js"></script>
     <script src="js/instruments.js"></script>
+    <script src="js/settings.js"></script>
 </head>
 
 <body>
@@ -22,6 +23,7 @@
             <nav role="navigation" aria-label="Main menu">
                 <ul>
                     <li><button id="about-button" class="menu-button">About</button></li>
+                    <li><button id="sound-button" class="menu-button">Sound</button></li>
                     <li><a href="https://github.com/ninoxboobook/gridsynth#readme">GitHub</a></li>
                 </ul>
             </nav>
@@ -45,6 +47,15 @@
         </main>
     </div>
     <aside>
+        <div id="sound" class="hidden" role="region" aria-labelledby="sound-heading" tabindex="-1">
+            <div class="sound-header">
+                <h2 id="sound-heading">Sound</h2>
+                <button id="sound-close" class="menu-button">Close</button>
+            </div>
+            <p>Change how gridsynth sounds. Changes are heard straight away, and gridsynth goes back to the original sound when the page is reloaded.</p>
+            <button id="sound-reset" class="small-button">Reset to the original sound</button>
+            <div id="sound-controls"></div>
+        </div>
         <div id="about" class="hidden">
         <h2>About gridsynth</h2>
         <p>Gridsynth is an art project by Rihana Ries.</p>
@@ -69,6 +80,7 @@
     </aside>
     <script src="js/visualiser.js"></script>
     <script src="js/gridsynth.js"></script>
+    <script src="js/sound.js"></script>
 </body>
 
 </html>

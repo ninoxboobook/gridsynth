@@ -10,11 +10,13 @@ const generationSources = [
     { name: 'battery', instrument: battery, start: "4n + 16n" },
 ];
 
-// The song currently loaded: its tempos, volumes and sequences
+// The song currently loaded: its data, tempos, volumes and sequences
 
+let currentDataset = null;
 let bpmData = [];
 let currentInstrumentVolumes = [];
 let sequences = [];
+let bassSequence = null;
 
 Tone.Transport.timeSignature = stepsPerBar; // One note of the bass line lasts one bar
 
@@ -32,10 +34,15 @@ let volumeLoop = new Tone.Loop((time) => {
     });
 }, "4n").start(0);
 
-// Turns a dataset into a song
+// Turns a dataset into a song, using the current sound settings
+
+const createTempos = (dataset) => {
+    return convertData(dataset.demand, createMaxValueArray(dataset.demand), settings.tempo.fastest - settings.tempo.slowest, settings.tempo.slowest);
+}
 
 function createSong(dataset) {
     let totalGeneration = dataset.totalGeneration;
+    currentDataset = dataset;
 
     // Clear out the previous song
 
@@ -47,32 +54,105 @@ function createSong(dataset) {
 
     // Get the data points for conversion
 
-    bpmData = convertData(dataset.demand, createMaxValueArray(dataset.demand), 60, 30);
+    bpmData = createTempos(dataset);
     tempoIndex = 0;
     setTempo(bpmData[0]); // Initial tempo
 
     generationSources.forEach((source) => {
         let generation = dataset.generation[source.name];
-        let volumeData = convertData(generation, totalGeneration, 21, -30);
         let melody = createMelody(generation, totalGeneration);
 
-        setVolume(volumeData[0], source.instrument); // Initial volume
-        currentInstrumentVolumes.push(new CurrentVolume(volumeData, source.instrument));
+        source.volumeData = convertData(generation, totalGeneration, 21, -30);
+        source.currentVolume = new CurrentVolume(source.volumeData, source.instrument, source.name);
+        currentInstrumentVolumes.push(source.currentVolume);
 
         // Set up the melody as a sequence
 
-        sequences.push(new Tone.Sequence((time, note) => {
-            if (note != 0) {
+        source.sequence = new Tone.Sequence((time, note) => {
+            if (note != 0 && isAudible(source.name)) {
                 source.instrument.triggerAttackRelease(note, "4n", time);
             }
-        }, melody, "4n").start(source.start));
+        }, melody, "4n").start(source.start);
+        sequences.push(source.sequence);
     });
 
-    sequences.push(new Tone.Sequence((time, note) => {
-        price.triggerAttackRelease(note, "1m", time);
-    }, createBassLine(dataset.price), "1m").start(0));
+    bassSequence = new Tone.Sequence((time, note) => {
+        if (isAudible('price')) {
+            price.triggerAttackRelease(note, "1m", time);
+        }
+    }, createBassLine(dataset.price), "1m").start(0);
+    sequences.push(bassSequence);
+
+    updateLevels(); // Initial volumes
 
     setVisualiserData(generationSources.map((source) => dataset.generation[source.name]), totalGeneration);
+}
+
+// Applying changes to the sound settings
+// Each of these can be called while the song is playing, and the change is heard straight away.
+
+// Rebuilds the melodies and the bass line from the current notes
+
+function updateNotes() {
+    if (!currentDataset) {
+        return;
+    }
+    generationSources.forEach((source) => {
+        source.sequence.events = createMelody(currentDataset.generation[source.name], currentDataset.totalGeneration);
+    });
+    bassSequence.events = createBassLine(currentDataset.price);
+}
+
+// Rebuilds the tempos from the current tempo range
+
+function updateTempo() {
+    if (!currentDataset) {
+        return;
+    }
+    bpmData = createTempos(currentDataset);
+    if (!playing) {
+        setTempo(bpmData[0]);
+    }
+}
+
+// Sets the volume of every voice: the volume from the data, plus the level set for the voice
+
+function updateLevels() {
+    generationSources.forEach((source) => {
+        if (source.currentVolume) {
+            let volume = source.currentVolume.value === undefined ? source.volumeData[0] : source.currentVolume.value;
+            setVolume(volume + settings.voices[source.name].trim, source.instrument);
+        }
+    });
+    setVolume(originalBassLevel + settings.voices.price.trim, price);
+}
+
+// Stops any note that is still sounding on a voice that has just been muted
+
+function silenceMutedVoices() {
+    voices.forEach((voice) => {
+        if (!isAudible(voice.name)) {
+            if (voice.instrument.releaseAll) {
+                voice.instrument.releaseAll();
+            } else {
+                voice.instrument.triggerRelease();
+            }
+        }
+    });
+}
+
+// Applies every sound setting at once
+
+function applySettings() {
+    voices.forEach((voice) => {
+        if (voice.synth) {
+            applySynthSettings(voice);
+        }
+    });
+    updateNotes();
+    updateTempo();
+    updateLevels();
+    silenceMutedVoices();
 }
 
 // Set up UI functions
@@ -236,6 +316,7 @@ window.addEventListener("load", function () {
     document.getElementById("stop-button").addEventListener("click", stop);
 
     document.getElementById("about-button").addEventListener("click", function () {
+        document.getElementById("sound").classList.add("hidden");
         document.getElementById("about").classList.toggle("hidden");
     })
 

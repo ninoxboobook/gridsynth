@@ -58,17 +58,17 @@ const createMelody = (generationValues, noise) => {
             if (generationValue > 1) {
                 pitch = Math.log(generationValue + noise[i]).toString().charAt(4);
                 if (pitch == '0' || pitch == '1') {
-                    pitch = scale[0];
+                    pitch = settings.melodyNotes[0];
                 } else if (pitch == '2' || pitch == '3') {
-                    pitch = scale[2];
+                    pitch = settings.melodyNotes[1];
                 } else if (pitch == '4' || pitch == '5') {
-                    pitch = scale[2];
+                    pitch = settings.melodyNotes[2];
                 } else if (pitch == '6' || pitch == '7') {
-                    pitch = scale[3];
+                    pitch = settings.melodyNotes[3];
                 } else if (pitch == '8' || pitch == '9') {
-                    pitch = scale[4];
+                    pitch = settings.melodyNotes[4];
                 } else {
-                    pitch = scale[0]; // The logarithm was too short to have a digit in this position
+                    pitch = settings.melodyNotes[0]; // The logarithm was too short to have a digit in this position
                 }
             } else {
                 pitch = 're';
@@ -130,13 +130,14 @@ const averageArray = (array, segmentSize) => {
 const createBassLine = (spotPrices) => {
     let averageSpotPrices = averageArray(spotPrices, stepsPerHour);
     let notesPerAverage = stepsPerHour / stepsPerBar; // Keeps each hour of price in step with the same hour of generation
+    let bassNotes = settings.bassNotes;
     let bassLineIndex = 0;
     let bassLine = [];
     if (averageSpotPrices) {
         for (let i = 0; i < averageSpotPrices.length; i++) {
             if (i > 0) {
                 if (averageSpotPrices[i] > averageSpotPrices[i - 1]) {
-                    if (bassLineIndex < 5) {
+                    if (bassLineIndex < bassNotes.length - 1) {
                         bassLineIndex++;
                     } else {
                         bassLineIndex = 0;
@@ -150,7 +151,7 @@ const createBassLine = (spotPrices) => {
                 }
             }
             for (let j = 0; j < notesPerAverage; j++) {
-                bassLine.push(bassLineScale[bassLineIndex]);
+                bassLine.push(bassNotes[bassLineIndex]);
             }
         }
         return bassLine;
@@ -165,14 +166,14 @@ const setVolume = (volume, instrument) => {
     instrument.volume.value = volume;
 }
 
-function CurrentVolume(volumes, instrument) {
+function CurrentVolume(volumes, instrument, voiceName) {
     this.value;
     this.timeIndex = 0;
     this.ramp = function () {
         this.value = Math.min(Math.max(parseInt(volumes[this.timeIndex]), -50), 0);
         if (volumes && instrument) {
             if (playing) {
-                setVolume(this.value, instrument);
+                setVolume(this.value + settings.voices[voiceName].trim, instrument);
                 console.log("[" + this.timeIndex + "] " + instrument + " volume: " + instrument.volume.value);
                 if (this.timeIndex < volumes.length - 1) {
                     this.timeIndex++;

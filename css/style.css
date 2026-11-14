@@ -225,3 +225,193 @@ button.emphasis:hover {
 #about ul ul {
     font-size: 1em;
 }
+
+/* The sound panel */
+
+#sound {
+    background: #311a5d;
+    color: #fff;
+    box-sizing: border-box;
+    padding: 2em 2.5em 3em 2.5em;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 40%;
+    min-width: 24em;
+    max-width: 100%;
+    overflow: auto;
+    z-index: 99999;
+    transition: right ease-in-out .4s, visibility 0s;
+}
+
+#sound:focus {
+    outline: none;
+}
+
+/* Hiding the panel also takes its controls out of the tab order */
+#sound.hidden {
+    right: -100vw;
+    visibility: hidden;
+    transition: right ease-in-out .4s, visibility 0s .4s;
+}
+
+@media (max-width: 700px) {
+    #sound {
+        width: 100%;
+        min-width: 0;
+        padding: 1.25em 1.25em 3em 1.25em;
+    }
+}
+
+.sound-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sound-header .menu-button {
+    font-size: 1.15em;
+}
+
+#sound h3 {
+    margin: 2em 0 .5em 0;
+    font-size: 1.25em;
+}
+
+#sound p {
+    line-height: 1.5;
+    margin: .5em 0 1em 0;
+}
+
+#sound fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0 0 1.5em 0;
+}
+
+#sound legend {
+    font-weight: 700;
+    padding: 0;
+}
+
+.small-button {
+    border-width: 2px;
+    font-size: 1em;
+    min-width: unset;
+    padding: 8px 16px;
+    margin: 0;
+}
+
+.sound-notes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75em;
+}
+
+.sound-field {
+    display: block;
+}
+
+.sound-field span {
+    display: block;
+    font-size: .85em;
+    margin-bottom: .25em;
+}
+
+#sound select, #sound input[type="number"] {
+    border: 2px #fff solid;
+    background-color: transparent;
+    color: #fff;
+    border-radius: 30px;
+    font-family: inherit;
+    font-size: 1em;
+    padding: 6px 12px;
+}
+
+#sound input[type="number"] {
+    width: 5em;
+}
+
+#sound option {
+    background-color: #fff;
+    color: #1e0342;
+}
+
+#sound input[type="range"] {
+    accent-color: #fff;
+    width: 100%;
+    margin: 0;
+}
+
+#sound input[type="checkbox"] {
+    accent-color: #fff;
+    width: 1.4em;
+    height: 1.4em;
+    margin: 0;
+}
+
+.sound-slider {
+    display: grid;
+    grid-template-columns: 6.5em 1fr 6.5em;
+    align-items: center;
+    gap: .75em;
+    margin: .75em 0;
+}
+
+.sound-slider span {
+    font-size: 1em;
+    margin: 0;
+}
+
+.sound-slider output {
+    font-size: .85em;
+}
+
+.sound-mixer {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.sound-mixer th, .sound-mixer td {
+    padding: .4em .5em .4em 0;
+    text-align: left;
+    font-weight: 400;
+    vertical-align: middle;
+}
+
+.sound-mixer tr:first-child th {
+    font-size: .85em;
+}
+
+.sound-mixer td:last-child {
+    width: 55%;
+}
+
+.sound-mixer .sound-slider {
+    grid-template-columns: 1fr 3.5em;
+    margin: 0;
+}
+
+#sound details {
+    border-top: 1px solid rgba(255, 255, 255, 0.4);
+    padding: .75em 0;
+}
+
+#sound summary {
+    cursor: pointer;
+    font-weight: 700;
+}
+
+#sound details .sound-field:first-of-type {
+    margin-top: 1em;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
