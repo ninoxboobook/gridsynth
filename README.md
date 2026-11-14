@@ -50,8 +50,8 @@ Finally, the gridsynth visualiser is painting a continuously updating graph of f
 ### Changing the sound
 Everything above describes the original sound, which is what gridsynth always starts with. The Sound panel on the page lets you change it while the song plays:
 
-* the five notes the melodies are built from, and the six notes the bass line steps through
-* the slowest and fastest tempo
+* the key and the mode (the original is C Ionian), and which positions in the scale the melodies and the bass line use
+* the slowest and fastest tempo, on one slider with two handles
 * mute, solo and level for each voice (level is added on top of the volume that comes from the data)
 * the wave shape and envelope of the three synth voices (coal, wind and gas), plus the harmonicity and modulation of the gas synth
 

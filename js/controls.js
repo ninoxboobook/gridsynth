@@ -41,7 +41,7 @@ const createNote = (pitch, octave) => {
         if (pitch + octave == 'rest') {
             note = 0;
         } else {
-            note = pitch.concat(octave);
+            note = getNote(pitch, octave); // The pitch is a position in the scale
         }
         return note;
     }
@@ -58,17 +58,17 @@ const createMelody = (generationValues, noise) => {
             if (generationValue > 1) {
                 pitch = Math.log(generationValue + noise[i]).toString().charAt(4);
                 if (pitch == '0' || pitch == '1') {
-                    pitch = settings.melodyNotes[0];
+                    pitch = settings.melodyDegrees[0];
                 } else if (pitch == '2' || pitch == '3') {
-                    pitch = settings.melodyNotes[1];
+                    pitch = settings.melodyDegrees[1];
                 } else if (pitch == '4' || pitch == '5') {
-                    pitch = settings.melodyNotes[2];
+                    pitch = settings.melodyDegrees[2];
                 } else if (pitch == '6' || pitch == '7') {
-                    pitch = settings.melodyNotes[3];
+                    pitch = settings.melodyDegrees[3];
                 } else if (pitch == '8' || pitch == '9') {
-                    pitch = settings.melodyNotes[4];
+                    pitch = settings.melodyDegrees[4];
                 } else {
-                    pitch = settings.melodyNotes[0]; // The logarithm was too short to have a digit in this position
+                    pitch = settings.melodyDegrees[0]; // The logarithm was too short to have a digit in this position
                 }
             } else {
                 pitch = 're';
@@ -130,7 +130,7 @@ const averageArray = (array, segmentSize) => {
 const createBassLine = (spotPrices) => {
     let averageSpotPrices = averageArray(spotPrices, stepsPerHour);
     let notesPerAverage = stepsPerHour / stepsPerBar; // Keeps each hour of price in step with the same hour of generation
-    let bassNotes = settings.bassNotes;
+    let bassNotes = settings.bassDegrees.map((degree) => getNote(degree, bassOctave));
     let bassLineIndex = 0;
     let bassLine = [];
     if (averageSpotPrices) {

@@ -1,16 +1,19 @@
 // The sound panel: controls for changing the sound settings while the song plays
 
-const noteNames = ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'];
+// How each mode is named in the panel
 
-// The bass line can use any note from C1 to C3
+const modeLabels = {
+    'Ionian': 'Ionian (major)',
+    'Dorian': 'Dorian',
+    'Phrygian': 'Phrygian',
+    'Lydian': 'Lydian',
+    'Mixolydian': 'Mixolydian',
+    'Aeolian': 'Aeolian (minor)',
+    'Locrian': 'Locrian',
+};
 
-const bassNoteNames = [];
-['1', '2'].forEach((octave) => {
-    noteNames.forEach((noteName) => {
-        bassNoteNames.push(noteName + octave);
-    });
-});
-bassNoteNames.push('C3');
+const melodyDegreeOptions = [1, 2, 3, 4, 5, 6, 7];
+const bassDegreeOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 
 // The settings of a synth voice that are set with a slider
 
@@ -37,12 +40,13 @@ const createElement = (tag, text, className) => {
 }
 
 // A drop-down list with a label. onChange is given the chosen value.
+// optionLabels gives the text to show for each option, if it is different from its value.
 
-const createSelect = (labelText, options, value, onChange) => {
+const createSelect = (labelText, options, value, onChange, optionLabels) => {
     const label = createElement("label", null, "sound-field");
     const select = document.createElement("select");
     options.forEach((optionValue) => {
-        const option = createElement("option", optionValue);
+        const option = createElement("option", optionLabels ? optionLabels[optionValue] : optionValue);
         option.value = optionValue;
         select.appendChild(option);
     });
@@ -90,76 +94,130 @@ const createCheckbox = (accessibleName, checked, onChange) => {
     return input;
 }
 
-// The melody and bass notes
+// The key, the mode, and the positions in the scale that the melodies and bass line use
 
-const createNotesSection = () => {
+// Shows each position in the scale next to the note it currently stands for, such as "5 · G"
+
+// Bass notes are shown with their octave. Melody notes are not, because their octave comes from the data.
+
+const showDegreeNotes = (select, octave) => {
+    Array.from(select.options).forEach((option) => {
+        const note = octave === undefined ? getNote(Number(option.value), 0).replace(/-?\d+$/, "") : getNote(Number(option.value), octave);
+        option.textContent = option.value + " \u00b7 " + note;
+    });
+}
+
+const createScaleSection = () => {
     const section = createElement("section");
-    section.append(createElement("h3", "Notes"));
+    section.append(createElement("h3", "Scale"));
+    section.append(createElement("p", "The notes of the song come from a key and a mode. The original is C Ionian."));
+
+    const melodySelects = [];
+    const bassSelects = [];
+    const showNotes = () => {
+        melodySelects.forEach((select) => showDegreeNotes(select));
+        bassSelects.forEach((select) => showDegreeNotes(select, bassOctave));
+    };
+
+    const scale = createElement("div", null, "sound-notes");
+    scale.append(createSelect("Key", noteNames, settings.key, (value) => {
+        settings.key = value;
+        updateNotes();
+        showNotes();
+    }));
+    scale.append(createSelect("Mode", Object.keys(modes), settings.mode, (value) => {
+        settings.mode = value;
+        updateNotes();
+        showNotes();
+    }, modeLabels));
 
     const melody = createElement("fieldset");
     melody.append(createElement("legend", "Melody notes"));
-    melody.append(createElement("p", "Every melody is built from these five notes. The original uses C twice."));
+    melody.append(createElement("p", "Every melody is built from five notes, each chosen by its position in the scale. The original uses the first note of the scale twice."));
     const melodyNotes = createElement("div", null, "sound-notes");
-    settings.melodyNotes.forEach((note, i) => {
-        melodyNotes.append(createSelect("Note " + (i + 1), noteNames, note, (value) => {
-            settings.melodyNotes[i] = value;
+    settings.melodyDegrees.forEach((degree, i) => {
+        const field = createSelect("Note " + (i + 1), melodyDegreeOptions, degree, (value) => {
+            settings.melodyDegrees[i] = Number(value);
             updateNotes();
-        }));
+        });
+        melodySelects.push(field.querySelector("select"));
+        melodyNotes.append(field);
     });
     melody.append(melodyNotes);
 
     const bass = createElement("fieldset");
     bass.append(createElement("legend", "Bass notes"));
-    bass.append(createElement("p", "The bass line steps up through these notes when the spot price rises, and back down when it falls."));
+    bass.append(createElement("p", "The bass line steps up through these notes when the spot price rises, and back down when it falls. Position 8 is the first note of the scale an octave higher."));
     const bassNotes = createElement("div", null, "sound-notes");
-    settings.bassNotes.forEach((note, i) => {
-        bassNotes.append(createSelect("Step " + (i + 1), bassNoteNames, note, (value) => {
-            settings.bassNotes[i] = value;
+    settings.bassDegrees.forEach((degree, i) => {
+        const field = createSelect("Step " + (i + 1), bassDegreeOptions, degree, (value) => {
+            settings.bassDegrees[i] = Number(value);
             updateNotes();
-        }));
+        });
+        bassSelects.push(field.querySelector("select"));
+        bassNotes.append(field);
     });
     bass.append(bassNotes);
 
-    section.append(melody, bass);
+    showNotes();
+    section.append(scale, melody, bass);
     return section;
 }
 
-// The tempo range. The fastest tempo is always kept above the slowest.
+// The tempo range: one slider with a handle for the slowest tempo and a handle for the fastest.
+// The fastest tempo is always kept above the slowest.
+
+const tempoLimits = { min: 10, max: 200 };
 
 const createTempoSection = () => {
     const section = createElement("section");
     section.append(createElement("h3", "Tempo"));
     section.append(createElement("p", "The song plays at the fastest tempo when demand is at its peak for the day, and slows towards the slowest tempo as demand falls."));
 
-    const createTempoField = (labelText, setting) => {
-        const label = createElement("label", null, "sound-field");
+    const range = createElement("div", null, "sound-range");
+    const track = createElement("div", null, "sound-range-track");
+    const output = document.createElement("output");
+
+    const createHandle = (setting, accessibleName) => {
         const input = document.createElement("input");
-        input.type = "number";
-        input.min = 10;
-        input.max = 240;
+        input.type = "range";
+        input.min = tempoLimits.min;
+        input.max = tempoLimits.max;
         input.step = 1;
         input.value = settings.tempo[setting];
-        input.addEventListener("change", function () {
-            let tempo = Math.round(Number(input.value));
-            if (!Number.isFinite(tempo)) {
-                tempo = settings.tempo[setting];
-            }
-            if (setting == 'slowest') {
-                tempo = Math.min(Math.max(tempo, 10), settings.tempo.fastest - 1);
-            } else {
-                tempo = Math.min(Math.max(tempo, settings.tempo.slowest + 1), 240);
-            }
-            settings.tempo[setting] = tempo;
-            input.value = tempo;
-            updateTempo();
-        });
-        label.append(createElement("span", labelText), input);
-        return label;
+        input.setAttribute("aria-label", accessibleName);
+        return input;
+    };
+    const slowest = createHandle('slowest', "Slowest tempo, in beats per minute");
+    const fastest = createHandle('fastest', "Fastest tempo, in beats per minute");
+
+    const showTempo = () => {
+        const position = (tempo) => (tempo - tempoLimits.min) / (tempoLimits.max - tempoLimits.min);
+        range.style.setProperty("--low", position(settings.tempo.slowest));
+        range.style.setProperty("--high", position(settings.tempo.fastest));
+        // When both handles are at the top of the slider, the slowest one has to be the one on top, or neither could move
+        slowest.style.zIndex = position(settings.tempo.slowest) > 0.5 ? 2 : 1;
+        fastest.style.zIndex = position(settings.tempo.slowest) > 0.5 ? 1 : 2;
+        output.textContent = settings.tempo.slowest + " to " + settings.tempo.fastest + " beats per minute";
     };
 
-    const fields = createElement("div", null, "sound-notes");
-    fields.append(createTempoField("Slowest (beats per minute)", 'slowest'), createTempoField("Fastest (beats per minute)", 'fastest'));
-    section.append(fields);
+    slowest.addEventListener("input", function () {
+        settings.tempo.slowest = Math.min(Number(slowest.value), settings.tempo.fastest - 1);
+        slowest.value = settings.tempo.slowest;
+        showTempo();
+        updateTempo();
+    });
+
+    fastest.addEventListener("input", function () {
+        settings.tempo.fastest = Math.max(Number(fastest.value), settings.tempo.slowest + 1);
+        fastest.value = settings.tempo.fastest;
+        showTempo();
+        updateTempo();
+    });
+
+    showTempo();
+    range.append(track, slowest, fastest);
+    section.append(range, output);
     return section;
 }
 
@@ -252,7 +310,7 @@ function showSoundControls() {
     const openSynths = Array.from(controls.querySelectorAll("details")).map((details) => details.open);
 
     controls.textContent = "";
-    controls.append(createNotesSection(), createTempoSection(), createMixerSection(), createSynthSection());
+    controls.append(createScaleSection(), createTempoSection(), createMixerSection(), createSynthSection());
 
     // Keep the synth sections that were open, open
     controls.querySelectorAll("details").forEach((details, i) => {

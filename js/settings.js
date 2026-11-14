@@ -15,6 +15,38 @@ const voices = [
     { name: 'price', label: 'Spot price (bass line)', instrument: price },
 ];
 
+// Keys and modes
+// The notes of the song come from a key and a mode. Each melody and bass note is a position
+// in that scale (a scale degree), so changing the key or the mode moves every note together.
+
+const noteNames = ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'];
+
+// Each mode, as the number of semitones each of its seven notes is above the key note
+
+const modes = {
+    'Ionian': [0, 2, 4, 5, 7, 9, 11],
+    'Dorian': [0, 2, 3, 5, 7, 9, 10],
+    'Phrygian': [0, 1, 3, 5, 7, 8, 10],
+    'Lydian': [0, 2, 4, 6, 7, 9, 11],
+    'Mixolydian': [0, 2, 4, 5, 7, 9, 10],
+    'Aeolian': [0, 2, 3, 5, 7, 8, 10],
+    'Locrian': [0, 1, 3, 5, 6, 8, 10],
+};
+
+const bassOctave = 1; // The octave the bass line starts in
+
+// Works out the note for a position in the scale. Positions above 7 carry on into the next
+// octave, so 8 is the key note an octave up. The octave is the octave of the C that the scale
+// is built from: keys from C to F# sit above that C and keys from G to B sit below it, which
+// keeps the song in a similar register in every key.
+
+const getNote = (degree, octave) => {
+    const key = noteNames.indexOf(settings.key);
+    const keyOffset = key > 6 ? key - 12 : key;
+    const semitones = keyOffset + modes[settings.mode][(degree - 1) % 7] + 12 * Math.floor((degree - 1) / 7);
+    return noteNames[((semitones % 12) + 12) % 12] + (Number(octave) + Math.floor(semitones / 12));
+}
+
 // The wave shapes a synth voice can use
 
 const waveShapes = ['sine', 'triangle', 'square', 'sawtooth'];
@@ -52,11 +84,18 @@ const originalBassLevel = price.volume.value;
 
 const createOriginalSettings = () => {
     const original = {
-        // The five notes a melody is built from. The original uses C twice and leaves out
-        // the B in the scale (see createMelody).
-        melodyNotes: [scale[0], scale[2], scale[2], scale[3], scale[4]],
-        // The notes the bass line steps through, from lowest to highest
-        bassNotes: bassLineScale.slice(),
+        // The original song is in C Ionian (C major)
+        key: 'C',
+        mode: 'Ionian',
+        // The five notes a melody is built from, as positions in the scale. In C Ionian these
+        // are G, C, C, D and E: the original scale of ['G', 'B', 'C', 'D', 'E'], which uses C
+        // twice and leaves out the B (see createMelody). Other scales that were tried:
+        // ['G', 'B', 'D', 'F#', 'A'];
+        // ['F','A','C','Eb','G'];
+        melodyDegrees: [5, 1, 1, 2, 3],
+        // The notes the bass line steps through, from lowest to highest. In C Ionian these
+        // are the original bass line scale of ['C1', 'E1', 'F1', 'G1', 'A1', 'C2'].
+        bassDegrees: [1, 3, 4, 5, 6, 8],
         // The tempo range in beats per minute
         tempo: { slowest: 30, fastest: 90 },
         voices: {},
