@@ -1284,6 +1284,36 @@
       "region": "WEM",
       "date": "2026-11-20",
       "file": "WEM-2026-11-20.json"
+    },
+    {
+      "region": "NSW1",
+      "date": "2026-11-21",
+      "file": "NSW1-2026-11-21.json"
+    },
+    {
+      "region": "QLD1",
+      "date": "2026-11-21",
+      "file": "QLD1-2026-11-21.json"
+    },
+    {
+      "region": "SA1",
+      "date": "2026-11-21",
+      "file": "SA1-2026-11-21.json"
+    },
+    {
+      "region": "TAS1",
+      "date": "2026-11-21",
+      "file": "TAS1-2026-11-21.json"
+    },
+    {
+      "region": "VIC1",
+      "date": "2026-11-21",
+      "file": "VIC1-2026-11-21.json"
+    },
+    {
+      "region": "WEM",
+      "date": "2026-11-21",
+      "file": "WEM-2026-11-21.json"
     }
   ]
 }
